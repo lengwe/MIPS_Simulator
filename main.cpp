@@ -1,7 +1,8 @@
 #include<iostream>
+#include<stdio.h>
 #include<fstream.h>
 #include<cstdlib>
-#include<fstream>
+#include<fstream>s
 #include<vector>
 using namespace std;
 
