@@ -1,4 +1,7 @@
 #include<iostream>
+#include<cstdlib>
+#include<fstream>
+#include<vector>
 using namespace std;
 
 typedef unsigned int uint6_t[6];
@@ -6,8 +9,6 @@ typedef unsigned int uint5_t[5];
 typedef unsigned int uint26_t[26];
 typedef unsigned int uint28_t[28];
 typedef int int18_t[18];
-
-
 
 
 uint32_t r[32];
@@ -20,6 +21,12 @@ int* pc;
 uint32_t *mem_add = NULL;
 uint32_t *data_reg = NULL;
 unsigned int count  = 0;
+
+void simulate(&input_bin);
+void compare_op(uint32_t reg);
+void i_type(uint32_t reg);
+void r_type(uint32_t reg);
+void j_type(uint32_t reg);
 
 struct rtype {
   uint6_t opcode, func;
@@ -39,30 +46,30 @@ struct jtype{
 };
 
 
-void memory_read(){
+void simulate(&input_bin){
+  memory[count] = &input_bin;
   pc = &memory[count];//default
   data = *pc;
 
   //ALU
   compare_op(data);
-
 }
 //判断opcode
 void compare_op(uint32_t reg){
   rtype decode;
   decode.opcode=reg>>26;
   if(decode.opcode==0){
-    r_type();
+    r_type(reg);
     count++;
   }
   else {
     if(decode.opcode==2||decode.opcode=3){
     //go to I j_type
-    j_type();
+    j_type(reg);
   }
   else{
     //go to i_type
-    i_type();
+    i_type(reg);
     //reset
     }
   }
@@ -574,12 +581,18 @@ void j_type(uint32_t reg){
     break;
 
     default:
-    break;
+    exit(-20);
 
   }
 }
 
 int main(int argc, char*argv[]){
+
+  if(argc!=2){
+    cout<<"not valid"<<endl;
+    return 0;
+  }
+
 
 
 
