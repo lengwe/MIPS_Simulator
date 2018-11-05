@@ -303,7 +303,7 @@ void i_type(uint32_t reg){
 
 
         default:
-        break;
+        exit(-20);
 
         }
 
@@ -348,7 +348,7 @@ void i_type(uint32_t reg){
 
 
     default:
-    break;
+    exit(-20);
 
 }
 
@@ -385,7 +385,7 @@ void r_type(uint32_t reg){
       break;
 
       default:
-      break;
+      exit(-20);
     }
   }
 
@@ -550,10 +550,11 @@ void r_type(uint32_t reg){
 
         case 0b001001:
         //JALR
+        break;
 
 
         default:
-        break;
+        exit(-20);
       }
 
     }
@@ -590,11 +591,13 @@ void j_type(uint32_t reg){
 int main(int argc, char*argv[]){
 
   ifstream binstream;
-  binstream.open(fileName, ios_base::binary|ios_base::in|ios_base::ate);
+  std::string filename = argv[1];
+  binstream.open(filename, ios_base::binary|ios_base::in|ios_base::ate);
   if(!binstream.is_open()){
-    cout<<"not valid"<<
+    cout<<"not valid"<<endl;
     exit(EXIT_FAILURE);
   }
+
   size_t size = binstream.tellg();
   binstream.seekg(0,ios::beg);
   std::vector<char> buffer;
