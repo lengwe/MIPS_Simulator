@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<fstream.h>
 #include<cstdlib>
-#include<fstream>s
+#include<fstream>
 #include<vector>
 using namespace std;
 
