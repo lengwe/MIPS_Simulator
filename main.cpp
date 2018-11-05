@@ -1,4 +1,5 @@
 #include<iostream>
+#include<fstream.h>
 #include<cstdlib>
 #include<fstream>
 #include<vector>
@@ -588,10 +589,25 @@ void j_type(uint32_t reg){
 
 int main(int argc, char*argv[]){
 
-  if(argc!=2){
-    cout<<"not valid"<<endl;
-    return 0;
+  ifstream binstream;
+  binstream.open(fileName, ios_base::binary|ios_base::in|ios_base::ate);
+  if(!binstream.is_open()){
+    cout<<"not valid"<<
+    exit(EXIT_FAILURE);
   }
+  size_t size = binstream.tellg();
+  binstream.seekg(0,ios::beg);
+  std::vector<char> buffer;
+  buffer.resize(size);
+  binstream.read(input_buffer.data(),size);
+
+  simulate(&input_buffer);
+
+  exit(0);
+}
+
+
+
 
 
 
