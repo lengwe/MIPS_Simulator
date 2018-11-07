@@ -1,5 +1,5 @@
-#ifndef rtype_H
-#define rtype_H
+#ifndef RTYPE_H
+#define RTYPE_H
 
 
 struct rtype {
