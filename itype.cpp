@@ -70,9 +70,8 @@ void i_type(uint32_t reg){
     case 0b100011：
     //LW
     //read the data into mem_address
-    mem_add = &r[decode.rs];
-    data_reg = &memory[*mem_add+decode.sai];
-    r[decode.rt] = *data_reg;
+    unsigned int mem_add = r[decode.rs];
+    r[decode.rt] = data_mem[mem_add+decode.sai];
     count++;
     break;
 
