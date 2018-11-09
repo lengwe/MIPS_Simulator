@@ -194,8 +194,15 @@ void r_type(uint32_t reg){
 
         case 0b001000:
         //JR
-        count = r[decode.rs];
-        pc = &memory[count];
+        if(ins_mem[count+1]==0){
+          count = r[decode.rs];
+          pc = &ins_mem[count];
+        }
+        else{
+          compare_op(ins_mem[count+1]);
+          count = r[decode.rs];
+          pc = &ins_mem[count];
+        }
         break;
 
         case 0b001001:
