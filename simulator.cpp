@@ -9,26 +9,24 @@
 #include "itype.hpp"
 using namespace std;
 
-typedef unsigned int uint28_t[28];
-typedef int int18_t[18];
-
 uint32_t r[32];
-//uint32_t memory[0x1FFFFFFF];
 uint *ins_mem = new uint32_t[0x1000000];
-uint *data_mem =  new uint32_t[0x4000000];
-const r[0] = 0;
+uint *data_mem =  new uint8_t[0x4000000];
 
 uint64_t hilo;
 unsigned int hi,lo;
 
-int *pc = ins_mem[0];
-int *ptr_data = data_mem[0];
-//int* pc = memory[0];
-//uint32_t *mem_add = NULL;
-//uint32_t *data_reg = NULL;
+int32_t *pc = ins_mem[0];
 
+void initial(uint32_t &uint32_t reg[32]){
+  for(int i=0;i<reg.size();i++){
+    reg[i] = 0;
+  }
+}
 
 int main(int argc, char*argv[]){
+  //initial regfile
+  initial(r[32]);
 
   ifstream binstream;
   std::string filename = argv[1];
@@ -40,11 +38,11 @@ int main(int argc, char*argv[]){
 
   size_t size = binstream.tellg();
   binstream.seekg(0,ios::beg);
-  std::vector<char> buffer;
+  std::vector<uint32_t> buffer;
   buffer.resize(size);
-  binstream.read(input_buffer.data(),size);
+  binstream.read(buffer.data(),size);
 
-  simulate(&input_buffer);
+  //simulate(&buffer);
 
   exit(0);
 }

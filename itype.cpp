@@ -15,7 +15,7 @@ void i_type(uint32_t reg){
     case 0b001001:
     //ADDIU
     r[decode.rt] = r[decode.rs] + decode.ai;
-  }
+    count++;
     break;
 
     case 0b001000:
@@ -28,21 +28,26 @@ void i_type(uint32_t reg){
     else{
       exit(-10);
     }
+    count++;
     break;
 
     case:0b001100:
     //ANDI
     r[decode.rt] = r[decode.rs] & decode.ai;
+    count++;
     break;
 
     case:0b001101:
     //ORI
     r[decode.rt] = r[decode.rs] | decode.ai;
+    count++;
     break;
 
     case:0b001110:
     //XORI
     r[decode.rt] = r[decode.rs] ^ decode.ai;
+    count++;
+    break;
 
     case:0b001010:
     //SLTI
@@ -55,6 +60,7 @@ void i_type(uint32_t reg){
     else{
       r[decode.rt] = 0;
     }
+    count++;
     break;
 
     case 0b001011:
@@ -65,48 +71,83 @@ void i_type(uint32_t reg){
     else{
       r[decode.rt] = 0;
     }
+    count++;
     break;
 
     case 0b100011：
     //LW
-    //read the data into mem_address
-    unsigned int mem_add = r[decode.rs];
-    r[decode.rt] = data_mem[mem_add+decode.sai];
+    uint32_t mem_add = r[decode.rs];
+      if((mem_add+decode.sai)%4==0||
+         0<=(mem_add+decode.sai)<=0x4000000-3){
+        int32_t fir_byte= data_mem[mem_add+decode.sai];
+        int32_t sec_byte = data_mem[mem_add+decode.sai+1];
+        int32_t thi_byte = data_mem[mem_add+decode.sai+2];
+        int32_t for_byte = data_mem[mem_add+decode.sai+3];
+        r[decode.rt] = fir_byte+(sec_byte<<8)+(thi_byte<<16)+(for_byte<<24);
+      }
+      else{
+        //unaligned
+        exit(-11);
+      }
+   }
     count++;
     break;
 
     case 0b101011:
     //SW
-    mem_add = &r[decode.rs];
-    data_reg = &r[decode.rt];
-    memory[*mem_add+decode.sai] = *data_reg;
+    if((mem_add+decode.sai)%4==0||
+        0<=(mem_add+decode.sai)<=0x4000000-3){
+      uint32_t word = r[decode.rt];
+      data_mem[mem_add+decode.sai] = word<<24>>24;
+      data_mem[mem_add+decode.sai+1] = word<<16>>24;
+      data_mem[mem_add+decode.sai+2] = word<<8>>24;
+      data_mem[mem_add+decode.sai+3] = word>>24;
+    }
+    else{
+      exit(-11);
+    }
     count++;
     break;
 
     case 0b101000:
     //SB
-    mem_add = &r[decode.rs];
-    data_reg = &r[decode.rt];
-    int32_t tmp=*data_reg<<24>>24;
-    memory[*mem_add+decode.sai] = tmp;
+    if(0<=(mem_add+decode.sai)<=0x4000000){
+    uint32_t mem_add = r[decode.rs];
+    uint32_t data_reg = r[decode.rt];
+    int8_t tmp=data_reg<<24>>24;
+    data_mem[mem_add+decode.sai] = tmp;
+    }
+    else{
+      exit(-11);
+    }
     count++;
     break;
 
     case 0b100000:
     //LB
-    mem_add = &r[decode.rs];
-    data_reg = &memory[*mem_add+decode.sai];
-    int32_t tmp=*data_reg<<24>>24;
+    if(0<=(mem_add+decode.sai)<=0x4000000){
+    uint32_t mem_add = r[decode.rs];
+    uint32_t data_reg = data_mem[mem_add+decode.sai];
+    int8_t tmp = data_reg<<24>>24;
     r[decode.rt] = tmp;
+    }
+    else{
+      exit(-11);
+    }
     count++;
     break;
 
     case 0b100100:
     //LBU
-    mem_add = &r[decode.rs];
-    data_reg = &memory[*mem_add+decode.sai];
-    uint32_t tmp=*data_reg<<24>>24;
+    if(0<=(mem_add+decode.sai)<=0x4000000){
+    uint32_t mem_add = r[decode.rs];
+    uint32_t data_reg = data_mem[mem_add+decode.sai];
+    uint8_t tmp = data_reg<<24>>24;
     r[decode.rt] = tmp;
+    }
+    else{
+      exit(-11);
+    }
     count++;
     break;
 
@@ -114,58 +155,135 @@ void i_type(uint32_t reg){
     //LUI
     int tmp = r[decode.sai]<<16;
     r[decode.rt] = tmp;
+    count++;
     break;
 
     case 0b100001:
     //LH
-    mem_add = &r[decode.rs];
-    data_reg = &memory[*mem_add+decode.sai];
-    int16_t tmp = *data_reg<<16>>16;
-    r[decode.rt] = tmp;
+    uint32_t mem_add = r[decode.rs];
+    if((mem_add+decode.sai)%4==0||
+        0<=(mem_add+decode.sai)<=0x4000000-1){
+      r[decode.rt] = data_mem[mem_add+decode.sai];
+      int32_t sec_byte = data_mem[mem_add+decode.sai+1];
+      sec_byte = sec_byte<<8;
+      r[decode.rt] = r[decode.rt] + sec_byte;
+    }
+    else{
+      exit(-11);
+    }
     count++;
     break;
 
     case 0b101001:
     //SH
-    mem_add = &r[decode.rs];
-    data_reg = &r[decode.rt];
-    int16_t tmp = *data_reg<<16>>16;
-    memory[*mem_add+decode.sai] = tmp;
+    uint32_t mem_add = r[decode.rs];
+    uint32_t data_reg = r[decode.rt];
+    if((mem_add+decode.sai)%4==0||
+        0<=(mem_add+decode.sai)<=0x4000000-1){
+      data_mem[mem_add+decode.sai] = data_reg<<24>>24;
+      data_mem[mem_add+decode.sai+1] = data_reg<<16>>24;
+    }
+    else{
+      exit(-11);
+    }
     count++;
     break;
 
     case 0b100101:
     //LHU
-    mem_add = &r[decode.rs];
-    data_reg = &memory[*mem_add+decode.sai];
-    uint16_t tmp = *data_reg<<16>>16;
-    r[decode.rt] = tmp;
+    uint32_t mem_add = r[decode.rs];
+    if((mem_add+decode.sai)%4==0||
+        0<=(mem_add+decode.sai)<=0x4000000-1){
+      r[decode.rt] = data_mem[mem_add+decode.sai];
+      uint32_t sec_byte = data_mem[mem_add+decode.sai+1];
+      sec_byte = sec_byte<<8;
+      r[decode.rt] = r[decode.rt] + sec_byte;
+    }
+    else{
+      exit(-11);
+    }
     count++;
     break;
 
     case 0b000100:
     //BEQ
-    if(r[decode.rs]==r[decode.rt]){
-      int18_t tmp = decode.sai<<2;
-      count += tmp;
-      pc =&memory[count];
-    }
-    else{
-      count++;
-      pc = &memory[count];
-    }
+
+      if (ins_mem[count+1]==0){
+
+        if(r[decode.rs]==r[decode.rt]){
+          uint32_t tmp = decode.sai<<2;
+          count = count+tmp+1;
+
+          if(0<=count<=0x1000000){
+          pc =&ins_mem[count];
+        }
+          else{
+            exit(-11);
+          }
+      }
+
+        else{
+          count++;
+        }
+      }
+
+      else{
+        //branch delay
+        compare_op(ins_mem[count+1]);
+        if(r[decode.rs]==r[decode.rt]){
+          uint32_t tmp = decode.sai<<2;
+          count = count+tmp+1;
+          if(0<=count<=0x1000000){
+          pc =&ins_mem[count];
+        }
+          else{
+            exit(-11);
+          }
+      }
+
+        else{
+          count++;
+        }
+      }
     break;
 
     case 0b000101:
     //BNE
-    if(r[decode.rs]!=r[decode.rt]){
-      int18_t tmp = decode.sai<<2;
-      count += tmp;
-      pc =&memory[count];
+
+    if (ins_mem[count+1]==0){
+
+      if(r[decode.rs]!=r[decode.rt]){
+        uint32_t tmp = decode.sai<<2;
+        count = count+tmp+1;
+        if(0<=count<=0x1000000){
+        pc =&ins_mem[count];
+      }
+        else{
+          exit(-11);
+        }
+      }
+
+      else{
+        count++;
+      }
     }
+
     else{
-      count++;
-      pc = &memory[count];
+      compare_op(ins_mem[count+1]);
+      if(r[decode.rs]!=r[decode.rt]){
+        uint32_t tmp = decode.sai<<2;
+        count = count+tmp+1;
+        if(0<=count<=0x1000000){
+        pc =&ins_mem[count];
+      }
+        else{
+          exit(-11);
+        }
+      }
+
+      else{
+        count++;
+      }
     }
     break;
 
@@ -174,105 +292,286 @@ void i_type(uint32_t reg){
       switch(decode.rt){
         case 0b00001:
         //BEGZ
+
+        if (ins_mem[count+1]==0){
+
           if(r[decode.rs]>=0){
-            int18_t tmp = decode.sai<<2;
-            count += tmp;
-            pc =&memory[count];
+            uint32_t tmp = decode.sai<<2;
+            count = count+tmp+1;
+            if(0<=count<=0x1000000){
+            pc =&ins_mem[count];
           }
+            else{
+              exit(-11);
+            }
+          }
+
           else{
             count++;
-            pc = &memory[count];
           }
+        }
+
+        else{
+          compare_op(ins_mem[count+1]);
+          if(r[decode.rs]>=0){
+            uint32_t tmp = decode.sai<<2;
+            count = count+tmp+1;
+            if(0<=count<=0x1000000){
+            pc =&ins_mem[count];
+          }
+            else{
+              exit(-11);
+            }
+          }
+
+          else{
+            count++;
+          }
+        }
         break;
 
         case 0b00000:
         //BLTZ
+
+        if (ins_mem[count+1]==0){
+
           if(r[decode.rs]<0){
-            int18_t tmp = decode.sai<<2;
-            count += tmp;
-            pc =&memory[count];
+            uint32_t tmp = decode.sai<<2;
+            count = count+tmp+1;
+            if(0<=count<=0x1000000){
+            pc =&ins_mem[count];
           }
+            else{
+              exit(-11);
+            }
+          }
+
           else{
             count++;
-            pc = &memory[count];
           }
+        }
+
+        else{
+          compare_op(ins_mem[count+1]);
+          if(r[decode.rs]<0){
+            uint32_t tmp = decode.sai<<2;
+            count = count+tmp+1;
+            if(0<=count<=0x1000000){
+            pc =&ins_mem[count];
+          }
+            else{
+              exit(-11);
+            }
+          }
+
+          else{
+            count++;
+          }
+        }
         break;
 
         case 0b10001:
         //BGEZAL
-          if(r[decode.rs]>=0){
-            r[31] = count++;
-            int18_t tmp_target = decode.sai<<2;
+
+        if(ins_mem[count+1]==0){
+
+          if(r[decode.rs>=0]){
+            r[31] = count+2;
+            uint32_t tmp_target = decode.sai<<2;
             count = tmp_target;
-            pc = &memory[count];
+            if(0<=count<=0x1000000){
+            pc =&ins_mem[count];
+          }
+            else{
+              exit(-11);
+            }
           }
           else{
             count++;
-            pc = &memory[count];
           }
+        }
+
+        else{
+          compare_op(ins_mem[count+1]);
+          if(r[decode.rs>=0]){
+            r[31] = count+2;
+            uint32_t tmp_target = decode.sai<<2;
+            count = tmp_target;
+            if(0<=count<=0x1000000){
+            pc =&ins_mem[count];
+          }
+            else{
+              exit(-11);
+            }
+          }
+
+          else{
+            count++;
+          }
+        }
         break;
 
         case 0b10000:
         //BLTZAL
-          if(r[decode.rs]<=0){
-            r[31] = count++;
-            int18_t tmp_target = decode.sai<<2;
+        if(ins_mem[count+1]==0){
+
+          if(r[decode.rs<0]){
+            r[31] = count+2;
+            uint32_t tmp_target = decode.sai<<2;
             count = tmp_target;
-            pc = &memory[count];
+            if(0<=count<=0x1000000){
+            pc =&ins_mem[count];
+          }
+            else{
+              exit(-11);
+            }
           }
           else{
             count++;
-            pc = &memory[count];
           }
+        }
+
+        else{
+          compare_op(ins_mem[count+1]);
+          if(r[decode.rs<0]){
+            r[31] = count+2;
+            uint32_t tmp_target = decode.sai<<2;
+            count = tmp_target;
+            if(0<=count<=0x1000000){
+            pc =&ins_mem[count];
+          }
+            else{
+              exit(-11);
+            }
+          }
+          else{
+            count++;
+          }
+        }
         break;
 
 
         default:
-        exit(-20);
+        exit(-12);
 
-        }
-
-
-
-      if(r[decode.rs]<0){
-        int18_t tmp = decode.sai<<2;
-        count += tmp;
-        pc =&memory[count];
       }
-      else{
-        count++;
-        pc = &memory[count];
-      }
-    break;
 
     case: 0b000111:
     //BGTZ
-    if(r[decode.rs]>0){
-      int18_t tmp = decode.sai<<2;
-      count += tmp;
-      pc =&memory[count];
+
+    if (ins_mem[count+1]==0){
+
+      if(r[decode.rs]>0){
+        uint32_t tmp = decode.sai<<2;
+        count = count+tmp+1;
+        if(0<=count<=0x1000000){
+        pc =&ins_mem[count];
+      }
+        else{
+          exit(-11);
+        }
+      }
+
+      else{
+        count++;
+      }
     }
+
     else{
-      count++;
-      pc = &memory[count];
+      compare_op(ins_mem[count+1]);
+      if(r[decode.rs]>0){
+        uint32_t tmp = decode.sai<<2;
+        count = count+tmp+1;
+        if(0<=count<=0x1000000){
+        pc =&ins_mem[count];
+      }
+        else{
+          exit(-11);
+        }
+      }
+
+      else{
+        count++;
+      }
     }
     break;
 
     case 0b000110:
     //BLEZ
-    if(r[decode.rs]<=0){
-      int18_t tmp = decode.sai<<2;
-      count += tmp;
-      pc =&memory[count];
+
+    if (ins_mem[count+1]==0){
+
+      if(r[decode.rs]<=0){
+        uint32_t tmp = decode.sai<<2;
+        count = count+tmp+1;
+        if(0<=count<=0x1000000){
+        pc =&ins_mem[count];
+      }
+        else{
+          exit(-11);
+        }
+      }
+
+      else{
+        count++;
+      }
     }
+
     else{
-      count++;
-      pc = &memory[count];
+      compare_op(ins_mem[count+1]);
+      if(r[decode.rs]<=0){
+        uint32_t tmp = decode.sai<<2;
+        count = count+tmp+1;
+        if(0<=count<=0x1000000){
+        pc =&ins_mem[count];
+      }
+        else{
+          exit(-11);
+        }
+      }
+
+      else{
+        count++;
+      }
     }
     break;
 
+    case 0b100010:
+    //LWL
+    uint32_t effaddr = decode.sai + r[decode.rs];
+    if(0<=effaddr<=0x4000000){
+      int32_t msig_byte = data_mem[effaddr];
+      uint32_t lsig_byte = data_mem[effaddr-1];
+      int32_t h_word = (msig_byte<<24) + (lsig_byte<<16);
+      uint32_t tmp_rt = r[decode.rt];
+      r[decode.rt] = (tmp_rt<<16>>16)+h_word;
+    }
+    else{
+      exit(-11);
+    }
+
+    count++;
+    break;
+
+    case 0b100110:
+    //LWR
+    uint32_t effaddr = decode.sai + r[decode.rs];
+    if(0<=effaddr<=0x4000000-1){
+      uint32_t lsig_byte = data_mem[effaddr];
+      uint32_t msig_byte = data_mem[effaddr+1];
+      int32_t h_word = (msig_byte<<8) + lsig_byte;
+      uint32_t tmp_rt = r[decode.rt];
+      r[decode.rt] = (tmp_rt>>16<<16)+h_word;
+    }
+    else{
+      exit(-11);
+    }
+
+    count++;
+    break;
 
     default:
-    exit(-20);
+    exit(-12);
+  }
 
 }

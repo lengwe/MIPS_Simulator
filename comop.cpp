@@ -6,14 +6,13 @@
 
 using namespace std;
 
-unsigned int count  = 0;
+uint32_t count  = 0;
 
 void compare_op(uint32_t reg){
   rtype decode;
   decode.opcode=reg>>26;
   if(decode.opcode==0){
     r_type(reg);
-    count++;
   }
   else {
     if(decode.opcode==2||decode.opcode=3){
@@ -26,4 +25,16 @@ void compare_op(uint32_t reg){
     //reset
     }
   }
+
+  if(0<=count<=0x1000000){
+  pc = &ins_mem[count];
+  }
+  else{
+    exit(-11);
+  }
+
+  if(r[0] != 0){
+    exit(-21);
+  }
+  
 }

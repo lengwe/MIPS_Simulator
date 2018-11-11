@@ -15,27 +15,27 @@ void r_type(uint32_t reg){
     switch (decode.func) {
       case 0b000000:
       //SLL shift left logical
-      if(decode.shamt){
-        r[decode.rd] = r[decode.rt]<<decode.shamt;
-      }
-      else{
-
-      }
+        uint32_t tmp_rt = r[decode.rt];
+        r[decode.rd] = tmp_rt<<decode.shamt;
+        count++;
       break;
 
       case 0b000010:
       //SRL Shift right logical
-        r[decode.rd] = r[decode.rt]>>decode.shamt;
+        uint32_t tmp_rt = r[decode.rt];
+        r[decode.rd] = tmp_rt>>decode.shamt;
+        count++;
       break;
 
       case 0b000011:
       //SRA Shift right arithmetic
       int32_t reg_signed = r[decode.rt];
       r[decode.rd] = reg_signed>>decode.shamt;
+      count++;
       break;
 
       default:
-      exit(-20);
+      exit(-12);
     }
   }
 
@@ -51,6 +51,7 @@ void r_type(uint32_t reg){
         else{
           exit(-10);
         }
+        count++;
         break;
 
         case 0b100010:
@@ -63,60 +64,57 @@ void r_type(uint32_t reg){
         else{
           exit(-10);
         }
+        count++;
         break;
 
         case 0b100001:
         //addu
         r[decode.rd] = r[decode.rs]+r[decode.rt];
+        count++;
         break;
 
         case 0b100011:
         //subu
         r[decode.rd] = r[decode.rs]-r[decode.rt];
+        count++;
         break;
 
         case 0b100100:
         //AND
         r[decode.rd] = r[decode.rs]&r[decode.rt];
+        count++;
         break;
 
         case 0b100101:
         //OR
         r[decode.rd] = r[decode.rs]|r[decode.rt];
+        count++;
         break;
 
         case 0b100110:
         //XOR
         r[decode.rd] = r[decode.rs]^r[decode.rt];
+        count++;
         break;
 
         case 0b000100:
         //sllv(min and max)
-        if(0<=r[decode.rs]<32){
         r[decode.rd] = r[decode.rt]<<r[decode.rs];
-        }
-        else{
-          //报错
-        }
+        count++;
+        break;
 
         case 0b000110:
         //srlv
-        if(0<=r[decode.rs]<32){
         r[decode.rd] = r[decode.rt]>>r[decode.rs];
-        }
-        else{
-          //报错
-        }
+        count++;
+        break;
 
         case 0b000111:
         //srav
-        if(0<=r[decode.rs]<32){
         int32_t reg_signed = r[decode.rt];
         r[decode.rd] = reg_signed>>r[decode.rs]
-        }
-        else{
-          //报错
-        }
+        count++;
+        break;
 
         case 0b101011:
         //SLTU
@@ -126,6 +124,7 @@ void r_type(uint32_t reg){
         else{
           r[decode.rd] = 0;
         }
+        count++;
         break;
 
         case 0b101010:
@@ -139,6 +138,7 @@ void r_type(uint32_t reg){
         else{
           r[decode.rd] = 0;
         }
+        count++;
         break;
 
         case 0b011001:
@@ -146,6 +146,7 @@ void r_type(uint32_t reg){
         hilo = r[decode.rs]*r[decode.rt];
         hi = hilo>>32;
         lo = hilo<<32>>32;
+        count++;
         break;
 
         case 0b01000:
@@ -156,40 +157,54 @@ void r_type(uint32_t reg){
         hilo = rs_tmp*rt_tmp;
         hi = hilo>>32;
         lo = hilo<<32>>32;
+        count++;
         break;
 
         case 0b011011:
         //DIVU
+        if(r[decode.rt] == 0){
+          exit(-10);
+        }
         hi = r[decode.rs]%r[decode.rt];
         lo = r[decode.rs]/r[decode.rt];
+        count++;
         break;
 
         case 0b011010:
         //DIV
+        if(r[decode.rt] == 0){
+          exit(-10);
+        }
+
         int rs_tmp = r[decode.rs];
         int rt_tmp = r[decode.rt];
         hi = rs_tmp%rt_tmp;
         lo = rs_tmp/rt_tmp;
+        count++;
         break;
 
         case 0b010000:
         //MFHI
         r[decode.rd] = hi;
+        count++;
         break;
 
         case 0b010010:
         //MFLO
         r[decode.rd] = lo;
+        count++;
         break;
 
         case 0b010001:
         //MTHI
         hi = r[decode.rs];
+        count++;
         break;
 
         case 0b010011:
         //MTLO
         lo = r[decode.rs];
+        count++;
         break;
 
         case 0b001000:
@@ -207,11 +222,26 @@ void r_type(uint32_t reg){
 
         case 0b001001:
         //JALR
+        if(r[decode.rs]==r[decode.rd]{
+          exit(-12);
+        }
+
+        if(ins_mem[count+1]){
+          r[decode.rd] = count+2;
+          count = r[decode.rs];
+          pc = &ins_mem[count];
+        }
+
+        else{
+          compare_op(ins_mem[count+1]);
+          r[decode.rd] = count+2;
+          count = r[decode.rs];
+          pc = &ins_mem[count];
+        }
         break;
 
-
         default:
-        exit(-20);
+        exit(-12);
       }
 
     }
