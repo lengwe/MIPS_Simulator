@@ -2,12 +2,10 @@
 #define RTYPE_H
 
 
-typedef unsigned int uint6_t[6];
-typedef unsigned int uint5_t[5];
 
 struct rtype {
-  uint6_t opcode, func;
-  uint5_t rs,rt,rd,shamt;
+  uint8_t opcode, func;
+  uint8_t rs,rt,rd,shamt;
 };
 
 

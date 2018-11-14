@@ -7,11 +7,12 @@
 #include "jtype.hpp"
 #include "rtype.hpp"
 #include "itype.hpp"
+#include "comop.hpp"
 using namespace std;
 
 uint32_t r[32];
-uint *ins_mem = new uint32_t[0x1000000];
-uint *data_mem =  new uint8_t[0x4000000];
+uint32_t *ins_mem = new uint32_t[0x1000000];
+uint8_t *data_mem =  new uint8_t[0x4000000];
 
 uint64_t hilo;
 unsigned int hi,lo;
@@ -36,13 +37,29 @@ int main(int argc, char*argv[]){
     exit(EXIT_FAILURE);
   }
 
-  size_t size = binstream.tellg();
-  binstream.seekg(0,ios::beg);
-  std::vector<uint32_t> buffer;
-  buffer.resize(size);
-  binstream.read(buffer.data(),size);
+  int len = binstream.tellg();
+  len =len -1;
+  if(len==0&&len%4!=0){
+    cout<<"invalid binary file"<<endl;
+    exit(-21);
+  }
 
-  //simulate(&buffer);
+  binstream.seekg(0);
+  char b;
+
+  for(int j=0; j<len/4;j++){
+    uint32_t ins=0;
+    int i=0;
+
+    while(file.good()&&i<=3){
+      file.get(b);
+      ins = ins+(b<<(8*(3-i)));
+      i++;
+    }
+
+    ins_mem[j]=a;
+    compare_op(ins_mem[j]);
+ }
 
   exit(0);
 }
