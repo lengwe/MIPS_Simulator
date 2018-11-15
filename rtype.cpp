@@ -18,6 +18,7 @@ void r_type(uint32_t reg){
         uint32_t tmp_rt = r[decode.rt];
         r[decode.rd] = tmp_rt<<decode.shamt;
         count++;
+        pc = pc+4;
       break;
 
       case 0b000010:
@@ -25,6 +26,7 @@ void r_type(uint32_t reg){
         uint32_t tmp_rt = r[decode.rt];
         r[decode.rd] = tmp_rt>>decode.shamt;
         count++;
+        pc=pc+4;
       break;
 
       case 0b000011:
@@ -32,6 +34,7 @@ void r_type(uint32_t reg){
       int32_t reg_signed = r[decode.rt];
       r[decode.rd] = reg_signed>>decode.shamt;
       count++;
+      pc=pc+4;
       break;
 
       default:
@@ -52,6 +55,7 @@ void r_type(uint32_t reg){
           exit(-10);
         }
         count++;
+        pc=pc+4;
         break;
 
         case 0b100010:
@@ -65,48 +69,56 @@ void r_type(uint32_t reg){
           exit(-10);
         }
         count++;
+        pc=pc+4;
         break;
 
         case 0b100001:
         //addu
         r[decode.rd] = r[decode.rs]+r[decode.rt];
         count++;
+        pc=pc+4;
         break;
 
         case 0b100011:
         //subu
         r[decode.rd] = r[decode.rs]-r[decode.rt];
         count++;
+        pc=pc+4;
         break;
 
         case 0b100100:
         //AND
         r[decode.rd] = r[decode.rs]&r[decode.rt];
         count++;
+        pc=pc+4;
         break;
 
         case 0b100101:
         //OR
         r[decode.rd] = r[decode.rs]|r[decode.rt];
         count++;
+        pc=pc+4;
         break;
 
         case 0b100110:
         //XOR
         r[decode.rd] = r[decode.rs]^r[decode.rt];
         count++;
+        pc=pc+4;
         break;
 
         case 0b000100:
         //sllv(min and max)
         r[decode.rd] = r[decode.rt]<<r[decode.rs];
         count++;
+        pc=pc+4;
         break;
 
         case 0b000110:
         //srlv
         r[decode.rd] = r[decode.rt]>>r[decode.rs];
         count++;
+        pc=pc+4;
         break;
 
         case 0b000111:
@@ -114,6 +126,7 @@ void r_type(uint32_t reg){
         int32_t reg_signed = r[decode.rt];
         r[decode.rd] = reg_signed>>r[decode.rs]
         count++;
+        pc=pc+4;
         break;
 
         case 0b101011:
@@ -125,6 +138,7 @@ void r_type(uint32_t reg){
           r[decode.rd] = 0;
         }
         count++;
+        pc=pc+4;
         break;
 
         case 0b101010:
@@ -139,6 +153,7 @@ void r_type(uint32_t reg){
           r[decode.rd] = 0;
         }
         count++;
+        pc=pc+4;
         break;
 
         case 0b011001:
@@ -147,6 +162,7 @@ void r_type(uint32_t reg){
         hi = hilo>>32;
         lo = hilo<<32>>32;
         count++;
+        pc=pc+4;
         break;
 
         case 0b01000:
@@ -158,6 +174,7 @@ void r_type(uint32_t reg){
         hi = hilo>>32;
         lo = hilo<<32>>32;
         count++;
+        pc=pc+4;
         break;
 
         case 0b011011:
@@ -168,6 +185,7 @@ void r_type(uint32_t reg){
         hi = r[decode.rs]%r[decode.rt];
         lo = r[decode.rs]/r[decode.rt];
         count++;
+        pc=pc+4;
         break;
 
         case 0b011010:
@@ -181,42 +199,48 @@ void r_type(uint32_t reg){
         hi = rs_tmp%rt_tmp;
         lo = rs_tmp/rt_tmp;
         count++;
+        pc=pc+4;
         break;
 
         case 0b010000:
         //MFHI
         r[decode.rd] = hi;
         count++;
+        pc=pc+4;
         break;
 
         case 0b010010:
         //MFLO
         r[decode.rd] = lo;
         count++;
+        pc=pc+4;
         break;
 
         case 0b010001:
         //MTHI
         hi = r[decode.rs];
         count++;
+        pc=pc+4;
         break;
 
         case 0b010011:
         //MTLO
         lo = r[decode.rs];
         count++;
+        pc=pc+4;
         break;
 
         case 0b001000:
         //JR
         if(ins_mem[count+1]==0){
           count = r[decode.rs];
-          pc = &ins_mem[count];
+          //pc = &ins_mem[count];
+          pc = 0x10000000+(count<<2);
         }
         else{
           compare_op(ins_mem[count+1]);
           count = r[decode.rs];
-          pc = &ins_mem[count];
+          pc = 0x10000000+(count<<2);
         }
         break;
 
@@ -229,14 +253,14 @@ void r_type(uint32_t reg){
         if(ins_mem[count+1]){
           r[decode.rd] = count+2;
           count = r[decode.rs];
-          pc = &ins_mem[count];
+          pc = 0x10000000+(count<<2);
         }
 
         else{
           compare_op(ins_mem[count+1]);
           r[decode.rd] = count+2;
           count = r[decode.rs];
-          pc = &ins_mem[count];
+          pc = 0x10000000+(count<<2);
         }
         break;
 

@@ -26,15 +26,13 @@ void compare_op(uint32_t reg){
     }
   }
 
-  if(0<=count<=0x1000000){
-  pc = &ins_mem[count];
-  }
-  else{
-    exit(-11);
-  }
+  if(count<0||
+    count>(0x1000000)>>2){
+        exit(-11);
+      }
 
   if(r[0] != 0){
     exit(-21);
   }
-  
+
 }
