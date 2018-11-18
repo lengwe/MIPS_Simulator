@@ -10,7 +10,7 @@ using namespace std;
 
 uint32_t r[32];
 uint32_t *ins_mem = new uint32_t[0x1000000>>2];
-uint8_t *data_mem =  new uint8_t[0x4000000];
+uint8_t *data_mem =  new uint8_t[0x4000008];
 char get;
 
 uint64_t hilo;
@@ -18,33 +18,29 @@ unsigned int hi,lo;
 
 //int32_t *pc = ins_mem[0];
 uint32_t pc = 0x10000000;
+uint32_t count  = 0;
 
 int32_t addr_getc(){
-  if(pc==0x30000000){
 
-    get=getchar();
-    pc=pc+4;
+  getchar();
+  if(data_mem[addr]!=EOF){
 
-    if(get!=EOF){
-      int32_t re = get;
-      return re;
-    }
-    else{
-      return -1;
-    }
+  }
+  else{
+
   }
 }
 
 void addr_putc(int val){
   if(pc==0x30000004){
-    if(val==-1){
+    if(val==-1||val==-2){
       exit(-21);
     }
     putchar(get);
   }
 }
 
-void initial(uint32_t &uint32_t reg[32]){
+void initial(){
   for(int i=0;i<reg.size();i++){
     reg[i] = 0;
   }
@@ -52,7 +48,7 @@ void initial(uint32_t &uint32_t reg[32]){
 
 int main(int argc, char*argv[]){
   //initial regfile
-  initial(r[32]);
+  initial();
 
   ifstream binstream;
   string filename = argv[1];
@@ -76,21 +72,32 @@ int main(int argc, char*argv[]){
 
   uint32_t a,b,c,d;
 
-  for(int i=0;i<len/4;i++){
+  for(int i=0;i<=len/4;i++){
 
-
+    if(i=len/4){
+      ins_mem[i]=0;
+    }
+    else{
       a = memblock[i*4];
       b = memblock[1+i*4];
       c = memblock[2+i*4];
       d = memblock[3+i*4];
 
-    ins_mem[i]=(a<<24)+(b<<16)+(c<<8)+d;
-    compare_op(ins_mem[i]);
-    int32_t val=addr_getc();
-    addr_putc(val);
+      ins_mem[i]=(a<<24)+(b<<16)+(c<<8)+d;
+    }
+
+//需要改
+  //  int32_t val=-2;
+    //val=addr_getc();
+    //addr_putc(val);
   }
-  pc = 0;
+
+
+  while(count<len/4){
+    compare_op(r[32], ins_mem[count], ins_mem, data_mem, hilo, hi, lo, pc, count);
+  }
   delete[]memblock;
 
-  exit(0);
+  uint8_t finish = r[2]<<24>>24;
+  exit(finish);
 }
