@@ -8,9 +8,9 @@
 #include "comop.hpp"
 using namespace std;
 
-uint32_t r[32];
+uint32_t r[32] = {0};
 uint32_t *ins_mem = new uint32_t[0x1000000>>2];
-uint8_t *data_mem =  new uint8_t[0x4000008];
+uint8_t *data_mem =  new uint8_t[0x4000008]();
 char get;
 
 uint64_t hilo;
@@ -20,31 +20,11 @@ unsigned int hi,lo;
 uint32_t pc = 0x10000000;
 uint32_t count  = 0;
 
-int32_t addr_getc(){
-
-  getchar();
-  if(data_mem[addr]!=EOF){
-
-  }
-  else{
-
-  }
-}
-
-void addr_putc(int val){
-  if(pc==0x30000004){
-    if(val==-1||val==-2){
-      exit(-21);
-    }
-    putchar(get);
-  }
-}
-
-void initial(){
+/*void initial(){
   for(int i=0;i<reg.size();i++){
     reg[i] = 0;
   }
-}
+}*/
 
 int main(int argc, char*argv[]){
   //initial regfile
