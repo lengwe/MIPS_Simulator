@@ -2,7 +2,7 @@
 #include "rtype.hpp"
 using namespace std;
 
-void r_type(uint32_t r[32], ins,uint32_t *ins_mem,uint32_t *data_mem,
+void r_type(uint32_t r[32], ins,uint32_t *ins_mem,uint8_t *data_mem,
             uint64_t &hilo,unsigned int &hi,unsigned int &lo,
             uint32_t &pc, uint32_t &count){
 

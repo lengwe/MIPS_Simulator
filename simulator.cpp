@@ -11,7 +11,6 @@ using namespace std;
 uint32_t r[32] = {0};
 uint32_t *ins_mem = new uint32_t[0x1000000>>2];
 uint8_t *data_mem =  new uint8_t[0x4000008]();
-char get;
 
 uint64_t hilo;
 unsigned int hi,lo;
@@ -29,6 +28,12 @@ uint32_t count  = 0;
 int main(int argc, char*argv[]){
   //initial regfile
   initial();
+
+  //TBC
+  if(argc!=2){
+    cout<<"invalid..."<<endl;
+    exit();
+  }
 
   ifstream binstream;
   string filename = argv[1];
@@ -65,11 +70,6 @@ int main(int argc, char*argv[]){
 
       ins_mem[i]=(a<<24)+(b<<16)+(c<<8)+d;
     }
-
-//需要改
-  //  int32_t val=-2;
-    //val=addr_getc();
-    //addr_putc(val);
   }
 
 
