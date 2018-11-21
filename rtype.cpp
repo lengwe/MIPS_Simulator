@@ -2,7 +2,7 @@
 #include "rtype.hpp"
 using namespace std;
 
-void r_type(uint32_t r[32], ins,uint32_t *ins_mem,uint8_t *data_mem,
+void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
             uint64_t &hilo,unsigned int &hi,unsigned int &lo,
             uint32_t &pc, uint32_t &count){
 
@@ -268,7 +268,7 @@ void r_type(uint32_t r[32], ins,uint32_t *ins_mem,uint8_t *data_mem,
 
           else{
 
-            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
             pc = r[decode.rs];
 
             if(pc>=0x10000000&&pc<=0x11000000){
@@ -303,7 +303,7 @@ void r_type(uint32_t r[32], ins,uint32_t *ins_mem,uint8_t *data_mem,
           }
           else{
 
-            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
             r[decode.rd] = pc+8;
             pc = r[decode.rs];
 

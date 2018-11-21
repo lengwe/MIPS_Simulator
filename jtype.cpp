@@ -3,7 +3,7 @@
 using namespace std;
 
 
-void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
+void j_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem,
             uint8_t *data_mem,uint64_t &hilo,unsigned int &hi,
             unsigned int &lo,uint32_t &pc, uint32_t &count){
 
@@ -31,7 +31,7 @@ void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
       }
       else{//have delay slot
 
-        compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+        compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
         uint32_t tmp_target = decode.target<<2;
         uint32_t tmp_c = count>>28<<28;
         uint pc=tmp_target+tmp_c;
@@ -68,7 +68,7 @@ void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
       }
 
       else{
-        compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count]);
+        compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count]);
 
         if(pc+8<=0x11000000){
 

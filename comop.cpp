@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void compare_op(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
+void compare_op(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
                 uint64_t &hilo,unsigned int &hi,unsigned int &lo,
                 uint32_t &pc, uint32_t &count){
 
@@ -18,14 +18,14 @@ void compare_op(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_me
     decode.opcode=ins>>26;
 
     if(decode.opcode==0){
-      r_type(r[32], ins, ins_mem,data_mem, hilo, hi, lo, pc, count);
+      r_type(r[], ins, ins_mem,data_mem, hilo, hi, lo, pc, count);
     }
     else {
-      if(decode.opcode==2||decode.opcode=3){
-        j_type(r[32], ins, ins_mem,data_mem, hilo, hi, lo, pc, count);
+      if(decode.opcode==2||decode.opcode==3){
+        j_type(r[], ins, ins_mem,data_mem, hilo, hi, lo, pc, count);
       }
       else{
-        i_type(r[32], ins, ins_mem,data_mem, hilo, hi, lo, pc, count);
+        i_type(r[], ins, ins_mem,data_mem, hilo, hi, lo, pc, count);
       //reset
       }
     }
