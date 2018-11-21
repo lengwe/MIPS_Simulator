@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void r_type(uint32_t r[32], ins,uint32_t *ins_mem,uint8_t *data_mem,
+void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
             uint64_t &hilo,unsigned int &hi,unsigned int &lo,
             uint32_t &pc, uint32_t &count){
 
@@ -58,7 +58,7 @@ void r_type(uint32_t r[32], ins,uint32_t *ins_mem,uint8_t *data_mem,
           int tmp1 = r[decode.rs];
           int tmp2 = r[decode.rt];
 
-          if(-2147483648<=tmp1+tmp2<=2147483647){
+          if((tmp1+tmp2)>=-2147483648&&(tmp1+tmp2)<=2147483647){
             r[decode.rd] = tmp1+tmp2;
           }
           else{
@@ -74,7 +74,7 @@ void r_type(uint32_t r[32], ins,uint32_t *ins_mem,uint8_t *data_mem,
           int tmp1 = r[decode.rs];
           int tmp2 = r[decode.rt];
 
-          if(-2147483648<=tmp1-tmp2<=2147483647){
+          if((tmp1-tmp2)>=-2147483648&&(tmp1-tmp2)<=2147483647){
             r[decode.rd] = tmp1-tmp2;
           }
           else{
@@ -288,7 +288,7 @@ void r_type(uint32_t r[32], ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b001001:{
         //JALR
-          if(r[decode.rs]==r[decode.rd]{
+          if(r[decode.rs]==r[decode.rd]){
             exit(-12);
           }
 

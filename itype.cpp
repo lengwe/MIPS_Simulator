@@ -6,7 +6,7 @@
 #include "comop.hpp"
 using namespace std;
 
-int32_t addr_getc(uint8_t *data_mem, uint32_t addr){
+int32_t addr_getc(){
 
   char c;
   c = getchar();
@@ -38,11 +38,11 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
   switch(decode.opcode){
 
-    case 0b001001:
+    case 0b001001:{
     //ADDIU
       r[decode.rt] = r[decode.rs] + decode.ai;
       count++;
-      pc = pc + 4;
+      pc = pc + 4;}
     break;
 
     case 0b001000:{
@@ -83,7 +83,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       pc = pc + 4;
     break;
 
-    case:0b001010:
+    case 0b001010:
     //SLTI
       int rs_tmp = r[decode.rs];
 
@@ -117,7 +117,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
     unsigned int addr = mem_add+decode.sai;
 
       if(addr<=0x30000003&&addr>=0x30000000){
-        addr_getc(data_mem,addr);
+        addr_getc();
       }
 
       if(addr<=0x30000007&&addr>=0x30000004){
@@ -206,7 +206,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
     unsigned int addr =mem_add+decode.sai;
 
     if(addr<=0x30000003&&addr>=0x30000000){
-      addr_getc(data_mem,addr);
+      addr_getc();
     }
 
     if(addr<=0x30000007&&addr>=0x30000004){
@@ -220,7 +220,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
     }
     else{
       if(addr>=0x30000000&&addr<=0x30000003){
-        addr_getc(data_mem,addr);
+        addr_getc();
       }
       exit(-11);
     }
@@ -235,7 +235,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
     //IO
     if(addr<=0x30000003&&addr>=0x30000000){
-      addr_getc(data_mem,addr);
+      addr_getc();
     }
 
     if(addr<=0x30000007&&addr>=0x30000004){
@@ -269,7 +269,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
     //IO
     if(addr<=0x30000003&&addr>=0x30000000){
-      addr_getc(data_mem,addr);
+      addr_getc();
     }
 
     if(addr<=0x30000007&&addr>=0x30000004){
@@ -325,7 +325,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
     //IO
     if(addr<=0x30000003&&addr>=0x30000000){
-      addr_getc(data_mem,addr);
+      addr_getc();
     }
 
     if(addr<=0x30000007&&addr>=0x30000004){
@@ -623,7 +623,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
       }
 
-    case: 0b000111:
+    case 0b000111:
     //BGTZ
 
     if (ins_mem[count+1]==0){

@@ -71,7 +71,7 @@ void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
       }
 
       else{
-        compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count]);
+        compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
         if(pc+8<=0x11000000){
 
