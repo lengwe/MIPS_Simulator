@@ -74,7 +74,7 @@ int main(int argc, char*argv[]){
 
 
   while(count<len/4){
-    compare_op(r[32], ins_mem[count], ins_mem, data_mem, hilo, hi, lo, pc, count);
+    compare_op(r, ins_mem[count], ins_mem, data_mem, hilo, hi, lo, pc, count);
   }
   delete[]memblock;
 

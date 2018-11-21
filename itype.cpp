@@ -3,6 +3,7 @@
 #include<stdint.h>
 #include<stdlib.h>
 #include"itype.hpp"
+#include "comop.hpp"
 using namespace std;
 
 int32_t addr_getc(uint8_t *data_mem, uint32_t addr){
@@ -24,12 +25,12 @@ void addr_putc(uint8_t *data_mem, uint32_t addr){
 
 
 
-void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
+void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
                 uint64_t &hilo,unsigned int &hi,unsigned int &lo,
                 uint32_t &pc, uint32_t &count){
 
   itype decode;
-  decode.opcode=ins>>26；
+  decode.opcode=ins>>26;
   decode.rs = ins<<6>>27;
   decode.rt = ins<<11>>27;
   decode.ai = ins<<16>>16;
@@ -44,7 +45,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       pc = pc + 4;
     break;
 
-    case 0b001000:
+    case 0b001000:{
     //ADDI
       int tmp1 = r[decode.rs];
       int tmp2 = r[decode.rt];
@@ -58,24 +59,24 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       }
 
       count++;
-      pc = pc + 4;
+      pc = pc + 4;}
     break;
 
-    case:0b001100:
+    case 0b001100:
     //ANDI
       r[decode.rt] = r[decode.rs] & decode.ai;
       count++;
       pc = pc + 4;
     break;
 
-    case:0b001101:
+    case 0b001101:
     //ORI
       r[decode.rt] = r[decode.rs] | decode.ai;
       count++;
       pc = pc + 4;
     break;
 
-    case:0b001110:
+    case 0b001110:
     //XORI
       r[decode.rt] = r[decode.rs] ^ decode.ai;
       count++;
@@ -85,9 +86,8 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
     case:0b001010:
     //SLTI
       int rs_tmp = r[decode.rs];
-      int ai_tmp = decode.sai
 
-      if(rs_tmp<ai_tmp){
+      if(rs_tmp<decode.sai){
         r[decode.rt] = 1;
       }
       else{
@@ -111,7 +111,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       pc = pc + 4;
     break;
 
-    case 0b100011：
+    case 0b100011:
     //LW
     uint32_t mem_add = r[decode.rs];
     unsigned int addr = mem_add+decode.sai;
@@ -220,7 +220,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
     }
     else{
       if(addr>=0x30000000&&addr<=0x30000003){
-        addr_getc();
+        addr_getc(data_mem,addr);
       }
       exit(-11);
     }
@@ -291,7 +291,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
     pc = pc + 4;
     break;
 
-    case 0b101001:
+    case 0b101001:{
     //SH
     uint32_t mem_add = r[decode.rs];
     uint32_t data_reg = r[decode.rt];
@@ -315,7 +315,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       exit(-11);
     }
     count++;
-    pc = pc + 4;
+    pc = pc + 4;}
     break;
 
     case 0b100101:
@@ -372,7 +372,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
       else{//branch delay
 
-        compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+        compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
         if(r[decode.rs]==r[decode.rt]){
 
@@ -416,7 +416,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
         }
       }
       else{
-        compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+        compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
         if(r[decode.rs]!=r[decode.rt]){
 
           uint32_t tmp = decode.sai<<2;
@@ -461,7 +461,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
             }
           }
           else{//delay slot
-            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
             if(r[decode.rs]>=0){
 
@@ -505,7 +505,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
             }
           }
           else{//delay slot
-            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
             if(r[decode.rs]<0){
 
@@ -550,7 +550,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
             }
           }
           else{//delay slot
-            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
             if(r[decode.rs>=0]){
 
@@ -595,7 +595,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
             }
           }
           else{//delay slot
-            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
             if(r[decode.rs<0]){
 
@@ -647,7 +647,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       }
     }
     else{//delay slot
-      compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+      compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
       if(r[decode.rs]>0){
 
@@ -695,7 +695,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       }
     }
     else{//delay slot
-      compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+      compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
       if(r[decode.rs]<=0){
 

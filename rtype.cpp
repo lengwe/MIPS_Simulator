@@ -2,9 +2,11 @@
 #include<stdint.h>
 #include<stdlib.h>
 #include "rtype.hpp"
+#include "comop.hpp"
+
 using namespace std;
 
-void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
+void r_type(uint32_t r[32], ins,uint32_t *ins_mem,uint8_t *data_mem,
             uint64_t &hilo,unsigned int &hi,unsigned int &lo,
             uint32_t &pc, uint32_t &count){
 
@@ -19,28 +21,28 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
    //Shift amount is not zero
     switch (decode.func) {
 
-      case 0b000000:
+      case 0b000000:{
       //SLL shift left logical
         uint32_t tmp_rt = r[decode.rt];
         r[decode.rd] = tmp_rt<<decode.shamt;
         count++;
-        pc = pc+4;
+        pc = pc+4;}
       break;
 
-      case 0b000010:
+      case 0b000010:{
       //SRL Shift right logical
         uint32_t tmp_rt = r[decode.rt];
         r[decode.rd] = tmp_rt>>decode.shamt;
         count++;
-        pc=pc+4;
+        pc=pc+4;}
       break;
 
-      case 0b000011:
+      case 0b000011:{
       //SRA Shift right arithmetic
        int32_t reg_signed = r[decode.rt];
        r[decode.rd] = reg_signed>>decode.shamt;
        count++;
-       pc=pc+4;
+       pc=pc+4;}
       break;
 
       default:
@@ -51,7 +53,7 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
   else{
       switch (decode.func) {
 
-        case 0b100000:
+        case 0b100000:{
         //add
           int tmp1 = r[decode.rs];
           int tmp2 = r[decode.rt];
@@ -64,10 +66,10 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
           }
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b100010:
+        case 0b100010:{
         //sub
           int tmp1 = r[decode.rs];
           int tmp2 = r[decode.rt];
@@ -80,67 +82,67 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
           }
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b100001:
+        case 0b100001:{
         //addu
           r[decode.rd] = r[decode.rs]+r[decode.rt];
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b100011:
+        case 0b100011:{
         //subu
           r[decode.rd] = r[decode.rs]-r[decode.rt];
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b100100:
+        case 0b100100:{
         //AND
           r[decode.rd] = r[decode.rs]&r[decode.rt];
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b100101:
+        case 0b100101:{
         //OR
           r[decode.rd] = r[decode.rs]|r[decode.rt];
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b100110:
+        case 0b100110:{
         //XOR
           r[decode.rd] = r[decode.rs]^r[decode.rt];
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b000100:
+        case 0b000100:{
         //sllv(min and max)
           r[decode.rd] = r[decode.rt]<<r[decode.rs];
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b000110:
+        case 0b000110:{
         //srlv
           r[decode.rd] = r[decode.rt]>>r[decode.rs];
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b000111:
+        case 0b000111:{
         //srav
           int32_t reg_signed = r[decode.rt];
           r[decode.rd] = reg_signed>>r[decode.rs];
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b101011:
+        case 0b101011:{
         //SLTU
           if(r[decode.rs]<r[decode.rt]){
             r[decode.rd] = 1;
@@ -150,10 +152,10 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
           }
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b101010:
+        case 0b101010:{
         //SLT
           int rs_tmp = r[decode.rs];
           int rt_tmp = r[decode.rt];
@@ -166,20 +168,20 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
           }
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b011001:
+        case 0b011001:{
         //MULTU
           hilo = r[decode.rs]*r[decode.rt];
           hi = hilo>>32;
           lo = hilo<<32>>32;
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b01000:
+        case 0b011000:{
         //MULT
           int rs_tmp = r[decode.rs];
           int rt_tmp = r[decode.rt];
@@ -189,10 +191,10 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
           lo = hilo<<32>>32;
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b011011:
+        case 0b011011:{
         //DIVU
           if(r[decode.rt] == 0){
             exit(-10);
@@ -203,10 +205,10 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
           }
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b011010:
+        case 0b011010:{
         //DIV
           if(r[decode.rt] == 0){
             exit(-10);
@@ -219,42 +221,42 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
           }
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b010000:
+        case 0b010000:{
         //MFHI
           r[decode.rd] = hi;
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b010010:
+        case 0b010010:{
         //MFLO
           r[decode.rd] = lo;
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b010001:
+        case 0b010001:{
         //MTHI
           hi = r[decode.rs];
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b010011:
+        case 0b010011:{
         //MTLO
           lo = r[decode.rs];
 
           count++;
-          pc=pc+4;
+          pc=pc+4;}
         break;
 
-        case 0b001000:
+        case 0b001000:{
         //JR
           if(ins_mem[count+1]==0){
 
@@ -270,7 +272,7 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
 
           else{
 
-            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
             pc = r[decode.rs];
 
             if(pc>=0x10000000&&pc<=0x11000000){
@@ -281,10 +283,10 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
                exit(-11);
             }
           }
-
+        }
         break;
 
-        case 0b001001:
+        case 0b001001:{
         //JALR
           if(r[decode.rs]==r[decode.rd]{
             exit(-12);
@@ -305,7 +307,7 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
           }
           else{
 
-            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
             r[decode.rd] = pc+8;
             pc = r[decode.rs];
 
@@ -317,6 +319,7 @@ void r_type(uint32_t r[], ins,uint32_t *ins_mem,uint8_t *data_mem,
                exit(-11);
             }
           }
+        }
         break;
 
         default:
