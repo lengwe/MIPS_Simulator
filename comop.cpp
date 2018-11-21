@@ -1,4 +1,6 @@
 #include<iostream>
+#include<stdint.h>
+#include<stdlib.h>
 #include "comop.hpp"
 #include "rtype.hpp"
 #include "jtype.hpp"

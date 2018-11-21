@@ -1,5 +1,7 @@
 #include<iostream>
 #include<cstdlib>
+#include<stdint.h>
+#include<stdlib.h>
 #include<fstream>
 #include<string>
 #include "jtype.hpp"
@@ -26,13 +28,11 @@ uint32_t count  = 0;
 }*/
 
 int main(int argc, char*argv[]){
-  //initial regfile
-  initial();
 
   //TBC
   if(argc!=2){
     cout<<"invalid..."<<endl;
-    exit();
+    exit(-21);
   }
 
   ifstream binstream;
@@ -43,7 +43,7 @@ int main(int argc, char*argv[]){
     exit(EXIT_FAILURE);
   }
 
-  size_t len = binstream.tellg();
+  int len = binstream.tellg();
   if(len==0||len%4!=0){
     cout<<"invalid binary file"<<endl;
     exit(-21);
@@ -74,7 +74,7 @@ int main(int argc, char*argv[]){
 
 
   while(count<len/4){
-    compare_op(r[], ins_mem[count], ins_mem, data_mem, hilo, hi, lo, pc, count);
+    compare_op(r[32], ins_mem[count], ins_mem, data_mem, hilo, hi, lo, pc, count);
   }
   delete[]memblock;
 

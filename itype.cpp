@@ -1,5 +1,7 @@
 #include<iostream>
 #include<cstdio>
+#include<stdint.h>
+#include<stdlib.h>
 #include"itype.hpp"
 using namespace std;
 
@@ -370,7 +372,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
       else{//branch delay
 
-        compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+        compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
         if(r[decode.rs]==r[decode.rt]){
 
@@ -414,7 +416,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
         }
       }
       else{
-        compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+        compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
         if(r[decode.rs]!=r[decode.rt]){
 
           uint32_t tmp = decode.sai<<2;
@@ -459,7 +461,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
             }
           }
           else{//delay slot
-            compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
             if(r[decode.rs]>=0){
 
@@ -503,7 +505,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
             }
           }
           else{//delay slot
-            compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
             if(r[decode.rs]<0){
 
@@ -548,7 +550,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
             }
           }
           else{//delay slot
-            compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
             if(r[decode.rs>=0]){
 
@@ -593,7 +595,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
             }
           }
           else{//delay slot
-            compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
             if(r[decode.rs<0]){
 
@@ -645,7 +647,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       }
     }
     else{//delay slot
-      compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+      compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
       if(r[decode.rs]>0){
 
@@ -693,7 +695,7 @@ void i_type(uint32_t r[], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       }
     }
     else{//delay slot
-      compare_op(r[], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+      compare_op(r[32], ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
       if(r[decode.rs]<=0){
 
