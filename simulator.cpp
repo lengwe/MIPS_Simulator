@@ -37,7 +37,7 @@ int main(int argc, char*argv[]){
 
   ifstream binstream;
   string filename = argv[1];
-  binstream.open(filename, ios_base::binary|ios_base::in|ios_base::ate);
+  binstream.open(filename, ios::binary|ios::in|ios::ate);
   if(!binstream.is_open()){
     cout<<"not valid"<<endl;
     exit(EXIT_FAILURE);
