@@ -10,24 +10,18 @@
 #include "comop.hpp"
 using namespace std;
 
-uint32_t r[32] = {0};
-uint32_t *ins_mem = new uint32_t[0x1000000>>2];
-uint8_t *data_mem =  new uint8_t[0x4000008]();
-
-uint64_t hilo;
-unsigned int hi,lo;
-
-//int32_t *pc = ins_mem[0];
-uint32_t pc = 0x10000000;
-uint32_t count  = 0;
-
-/*void initial(){
-  for(int i=0;i<reg.size();i++){
-    reg[i] = 0;
-  }
-}*/
 
 int main(int argc, char*argv[]){
+
+  uint32_t r[32] = {0};
+  uint32_t *ins_mem = new uint32_t[0x1000000>>2];
+  uint8_t *data_mem =  new uint8_t[0x4000008]();
+
+  uint64_t hilo;
+  unsigned int hi,lo;
+
+  uint32_t pc = 0x10000000;
+  uint32_t count  = 0;
 
   //TBC
   if(argc!=2){
@@ -43,7 +37,7 @@ int main(int argc, char*argv[]){
     exit(EXIT_FAILURE);
   }
 
-  int len = binstream.tellg();
+  uint32_t len = binstream.tellg();
   if(len==0||len%4!=0){
     cout<<"invalid binary file"<<endl;
     exit(-21);
