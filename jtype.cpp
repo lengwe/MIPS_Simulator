@@ -16,7 +16,7 @@ void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
 
   switch(decode.opcode){
 
-    case 0b000010:
+    case 0b000010:{
     //J
       if (ins_mem[count+1]==0){
 
@@ -47,9 +47,10 @@ void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
           exit(-11);
         }
       }
+    }
     break;
 
-    case 0b000011:
+    case 0b000011:{
     //JAL
       if(ins_mem[count+1]==0){
         if(pc+8<=0x11000000){
@@ -90,6 +91,7 @@ void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
            exit(-11);
         }
       }
+    }
     break;
 
     default:
