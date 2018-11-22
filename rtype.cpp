@@ -55,10 +55,10 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b100000:{
         //add
-          int tmp1 = r[decode.rs];
-          int tmp2 = r[decode.rt];
+          double tmp1 = r[decode.rs];
+          double tmp2 = r[decode.rt];
 
-          if((tmp1+tmp2)>=-2147483648&&(tmp1+tmp2)<=2147483647){
+          if((tmp1+tmp2)>=-2147483648||(tmp1+tmp2)<=2147483647){
             r[decode.rd] = tmp1+tmp2;
           }
           else{
@@ -71,10 +71,10 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b100010:{
         //sub
-          int tmp1 = r[decode.rs];
-          int tmp2 = r[decode.rt];
+          double tmp1 = r[decode.rs];
+          double tmp2 = r[decode.rt];
 
-          if((tmp1-tmp2)>=-2147483648&&(tmp1-tmp2)<=2147483647){
+          if((tmp1-tmp2)>=-2147483648||(tmp1-tmp2)<=2147483647){
             r[decode.rd] = tmp1-tmp2;
           }
           else{

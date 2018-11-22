@@ -22,7 +22,7 @@ void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
 
         uint32_t tmp_target = decode.target<<2;
         uint32_t tmp_c = count>>28<<28;
-        uint pc=tmp_target+tmp_c;
+        pc=tmp_target+tmp_c;
 
         if(pc>=0x10000000&&pc<=0x11000000){
 
@@ -37,7 +37,7 @@ void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
         compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
         uint32_t tmp_target = decode.target<<2;
         uint32_t tmp_c = count>>28<<28;
-        uint pc=tmp_target+tmp_c;
+        pc=tmp_target+tmp_c;
 
         if(pc>=0x10000000&&pc<=0x11000000){
 
@@ -60,7 +60,7 @@ void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
 
         uint32_t tmp_target = decode.target<<2;
         uint32_t tmp_c = count>>28<<28;
-        uint pc=tmp_target+tmp_c;
+        pc=tmp_target+tmp_c;
 
         if(pc>=0x10000000&&pc<=0x11000000){
 
@@ -81,7 +81,7 @@ void j_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,
 
         uint32_t tmp_target = decode.target<<2;
         uint32_t tmp_c = count>>28<<28;
-        uint count=tmp_target+tmp_c;
+        pc=tmp_target+tmp_c;
 
         if(pc>=0x10000000&&pc<=0x11000000){
 

@@ -47,10 +47,10 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
     case 0b001000:{
     //ADDI
-      int tmp1 = r[decode.rs];
-      int tmp2 = r[decode.rt];
+      double tmp1 = r[decode.rs];
+      double tmp2 = r[decode.rt];
 
-      if((tmp1+tmp2)>=-2147483648&&
+      if((tmp1+tmp2)>=-2147483648||
       (tmp1+tmp2)<=2147483647){
         r[decode.rt] = tmp1+decode.sai;
       }
@@ -443,9 +443,11 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
         case 0b00001:{
         //BEGZ
 
+          int rs_tmp = r[decode.rs];
+
           if (ins_mem[count+1]==0){
 
-            if(r[decode.rs]>=0){
+            if(rs_tmp>=0){
               uint32_t tmp = decode.sai<<2;
               pc = pc+tmp+4;
               if(pc>=0x10000000&&pc<=0x11000000){
@@ -464,7 +466,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
           else{//delay slot
             compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
-            if(r[decode.rs]>=0){
+            if(rs_tmp>=0){
 
               uint32_t tmp = decode.sai<<2;
               pc = pc+tmp+4;
@@ -487,9 +489,11 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
         case 0b00000:{
         //BLTZ
 
+        int rs_tmp = r[decode.rs];
+
           if (ins_mem[count+1]==0){
 
-            if(r[decode.rs]<0){
+            if(rs_tmp<0){
 
               uint32_t tmp = decode.sai<<2;
               pc = pc+tmp+4;
@@ -509,7 +513,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
           else{//delay slot
             compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
-            if(r[decode.rs]<0){
+            if(rs_tmp<0){
 
               uint32_t tmp = decode.sai<<2;
               pc = pc+tmp+4;
@@ -531,10 +535,11 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
         case 0b10001:{
         //BGEZAL
+        int rs_tmp = r[decode.rs];
 
           if(ins_mem[count+1]==0){
 
-            if(r[decode.rs>=0]){
+            if(rs_tmp>=0){
 
               r[31] = pc+8;
               uint32_t tmp_target = decode.sai<<2;
@@ -555,7 +560,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
           else{//delay slot
             compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
-            if(r[decode.rs>=0]){
+            if(rs_tmp>=0){
 
               r[31] = pc+8;
               uint32_t tmp_target = decode.sai<<2;
@@ -578,9 +583,11 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
         case 0b10000:{
         //BLTZAL
+        int rs_tmp = r[decode.rs];
+
           if(ins_mem[count+1]==0){
 
-            if(r[decode.rs<0]){
+            if(rs_tmp<0){
 
               r[31] = pc+8;
               uint32_t tmp_target = decode.sai<<2;
@@ -601,7 +608,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
           else{//delay slot
             compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
-            if(r[decode.rs<0]){
+            if(rs_tmp<0){
 
               r[31] = pc+8;
               uint32_t tmp_target = decode.sai<<2;
@@ -632,10 +639,11 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
     case 0b000111:{
     //BGTZ
+      int rs_tmp = r[decode.rs];
 
       if (ins_mem[count+1]==0){
 
-        if(r[decode.rs]>0){
+        if(rs_tmp>0){
 
           uint32_t tmp = decode.sai<<2;
           pc = pc+tmp+4;
@@ -656,7 +664,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       else{//delay slot
         compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
-        if(r[decode.rs]>0){
+        if(rs_tmp>0){
 
           uint32_t tmp = decode.sai<<2;
           pc = pc+tmp+4;
@@ -680,10 +688,11 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
 
     case 0b000110:{
     //BLEZ
+      int rs_tmp = r[decode.rs];
 
       if (ins_mem[count+1]==0){
 
-        if(r[decode.rs]<=0){
+        if(rs_tmp<=0){
 
           uint32_t tmp = decode.sai<<2;
           pc = pc+tmp+4;
@@ -705,7 +714,7 @@ void i_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem, uint8_t *data_mem,
       else{//delay slot
         compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
 
-        if(r[decode.rs]<=0){
+        if(rs_tmp<=0){
 
           uint32_t tmp = decode.sai<<2;
           pc = pc+tmp+4;

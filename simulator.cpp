@@ -59,17 +59,13 @@ int main(int argc, char*argv[]){
 
   for(int i=0;i<=len/4;i++){
 
-    if(i=len/4){
-      ins_mem[i]=0;
-    }
-    else{
       a = memblock[i*4];
       b = memblock[1+i*4];
       c = memblock[2+i*4];
       d = memblock[3+i*4];
 
       ins_mem[i]=(a<<24)+(b<<16)+(c<<8)+d;
-    }
+
   }
 
 
