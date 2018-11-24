@@ -12,10 +12,16 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
   rtype decode;
   decode.rs = ins<<6>>27;
+  //decode.rs = ins & (0x3F);
+  //<<"decode.rs: "<<decode.rs<<endl;
   decode.rt = ins<<11>>27;
+  //<<"decode.rt: "<<decode.rt<<endl;
   decode.rd = ins<<16>>27;
+  //<<"decode.rd: "<<decode.rd<<endl;
   decode.shamt = ins<<21>>27;
+  //<<"decode.shamt: "<<decode.shamt<<endl;
   decode.func = ins<<26>>26;
+  //<<"decode.func"<<decode.func<<endl;
 
   if(decode.shamt!=0){
    //Shift amount is not zero
@@ -23,8 +29,12 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
       case 0b000000:{
       //SLL shift left logical
+        //<<"sll: "<<endl;
         uint32_t tmp_rt = r[decode.rt];
         r[decode.rd] = tmp_rt<<decode.shamt;
+        //<<"tmp_rt is "<<tmp_rt<<endl;
+        //<<"shamt is "<<decode.shamt<<endl;
+        //<<"rd inside sll is "<<r[decode.rd]<<endl;
         count++;
         pc = pc+4;}
       break;
@@ -124,7 +134,11 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b000100:{
         //sllv(min and max)
+          //<<"sllv: "<<endl;
           r[decode.rd] = r[decode.rt]<<r[decode.rs];
+          //<<"rt is "<<r[decode.rt]<<endl;
+          //<<"rs is "<<r[decode.rs]<<endl;
+          //<<"rd is "<<r[decode.rd]<<endl;
           count++;
           pc=pc+4;}
         break;
@@ -262,12 +276,18 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
           if(ins_mem[count+1]==0){
 
             pc = r[decode.rs];
-            if(pc>=0x10000000&&pc<=0x11000000){
+            //<<"pc is "<<r[decode.rs]<<endl;
 
-              count =(pc-0x10000000)>>2;
+            if(pc==0){
+              return;
             }
             else{
-               exit(-11);
+              if(pc>=0x10000000&&pc<=0x11000000){
+                count =(pc-0x10000000)>>2;
+              }
+              else{
+                exit(-11);
+              }
             }
           }
 
@@ -276,12 +296,16 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
             compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
             pc = r[decode.rs];
 
-            if(pc>=0x10000000&&pc<=0x11000000){
-
-              count =(pc-0x10000000)>>2;
+            if(pc==0){
+              return;
             }
             else{
-               exit(-11);
+              if(pc>=0x10000000&&pc<=0x11000000){
+                count =(pc-0x10000000)>>2;
+              }
+              else{
+                exit(-11);
+              }
             }
           }
         }

@@ -58,16 +58,23 @@ int main(int argc, char*argv[]){
 
    while(count<len/4){
 
-      //  r[1] = 1;
-      //  cout<<"rs:"<<r[1]<<endl;
-      //  r[2] = 1;
-      //  cout<<"rt:"<<r[2]<<endl;
-      //  r[3] = 3;
-      // ins_mem[0] = 0b00000000000000000000000000000001;
-      compare_op(r, ins_mem[count], ins_mem, data_mem, hi, lo, pc, count);
+        // r[1] = 1;
+        // cout<<"rs:"<<r[1]<<endl;
+        // r[2] = 1;
+        // cout<<"rt:"<<r[2]<<endl;
+        // r[3] = 3;
+        //addiu $t0, $t0,3
+       //ins_mem[0] = 0b00100101000010000000000000000011;
+       //sll $2,$t0,1
+       //ins_mem[1] = 0b00000000000010000001000001000000;
+       //jr $0
+       //ins_mem[2] = 0b00000000000000000000000000001000;
+      //for(int i=0;i<3;i++){
+        compare_op(r, ins_mem[count], ins_mem, data_mem, hi, lo, pc, count);
+      //}
       // cout<<count<<endl;
       // cout<<pc<<endl;
-      // cout<<"rd:"<<r[3]<<endl;
+      //cout<<"r2:"<<r[2]<<endl;
     }
   delete[]memblock;
 

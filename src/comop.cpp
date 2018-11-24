@@ -17,7 +17,6 @@ void compare_op(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_m
     else{
       rtype decode;
       decode.opcode=ins>>26;
-      cout<<"opcode: "<<decode.opcode<<endl;
 
       if(decode.opcode==0){
         r_type(r, ins, ins_mem,data_mem, hi, lo, pc, count);

@@ -4,8 +4,8 @@
 
 
 struct rtype {
-  uint8_t opcode, func;
-  uint8_t rs,rt,rd,shamt;
+  uint16_t opcode, func;
+  uint16_t rs,rt,rd,shamt;
 };
 
 

@@ -3,8 +3,8 @@
 
 
 struct itype{
-  uint8_t opcode;
-  uint8_t rs,rt;
+  uint16_t opcode;
+  uint16_t rs,rt;
   uint16_t ai;
   int16_t sai;
 };

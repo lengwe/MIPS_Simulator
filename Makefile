@@ -34,12 +34,40 @@ MIPS_LDFLAGS = -nostdlib -Wl,-melf32btsmip -march=mips1 -nostartfiles -mno-check
 	$(MIPS_OBJDUMP) -j .text -D $< > $@
 
 # Build simulator
-bin/mips_simulator: simulator.cpp
-	mkdir -p bin
-	$(CC) $(CPPFLAGS) $^ -o bin/mips_simulator
+#bin/mips_simulator: simulator.cpp comop.cpp rtype.cpp itype.cpp jtype.cpp comop.hpp rtype.hpp itype.hpp jtype.hpp
+	#mkdir -p bin/
+	#$(CC) $(CPPFLAGS) -c comop.cpp -o bin/comop.o
+	#$(CC) $(CPPFLAGS) -c rtype.cpp -o bin/rtype.o
+	#$(CC) $(CPPFLAGS) -c itype.cpp -o bin/itype.o
+	#$(CC) $(CPPFLAGS) -c jtype.cpp -o bin/jtype.o
+	#$(CC) $(CPPFLAGS) -c simulator.cpp -o bin/simulator.o
+
+	#$(CC) $(CPPFLAGS) bin/*.o -o bin/mips_simulator
 
 # Dummy for build simulator to conform to spec
-simulator: bin/mips_simulator
+#simulator: bin/mips_simulator
+
+simulator : simulator.o rtype.o itype.o jtype.o comop.o
+	mkdir -p bin
+	rm -f bin/mips_simulator
+	$(CC) $(CPPFLAGS) ./src/*.o -o bin/mips_simulator
+
+
+simulator.o: ./src/simulator.cpp
+	$(CC) $(CPPFLAGS) -c ./src/simulator.cpp -o ./src/simulator.o
+
+rtype.o: ./src/rtype.cpp ./src/rtype.hpp
+	$(CC) $(CPPFLAGS) -c ./src/rtype.cpp -o ./src/rtype.o
+
+itype.o: ./src/itype.cpp ./src/itype.hpp
+	$(CC) $(CPPFLAGS) -c ./src/itype.cpp -o ./src/itype.o
+
+jtype.o: ./src/jtype.cpp ./src/jtype.hpp
+	$(CC) $(CPPFLAGS) -c ./src/jtype.cpp -o ./src/jtype.o
+
+comop.o: ./src/comop.cpp ./src/comop.hpp
+	$(CC) $(CPPFLAGS) -c ./src/comop.cpp -o ./src/comop.o
+
 
 # Dummy for build testbench to conform to spec. Could do nothing
 testbench:
