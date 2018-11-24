@@ -6,8 +6,8 @@
 
 using namespace std;
 
-void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
-            uint64_t &hilo,unsigned int &hi,unsigned int &lo,
+void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
+            int32_t &hi,int32_t &lo,
             uint32_t &pc, uint32_t &count){
 
   rtype decode;
@@ -55,11 +55,12 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b100000:{
         //add
-          double tmp1 = r[decode.rs];
-          double tmp2 = r[decode.rt];
+           int64_t tmp1 = r[decode.rs];
+           int64_t tmp2 = r[decode.rt];
+           int64_t test = tmp1+tmp2;
 
-          if((tmp1+tmp2)>=-2147483648||(tmp1+tmp2)<=2147483647){
-            r[decode.rd] = tmp1+tmp2;
+          if(test>=-2147483648&&test<=2147483647){
+            r[decode.rd] = r[decode.rs]+r[decode.rt];
           }
           else{
             exit(-10);
@@ -71,11 +72,12 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b100010:{
         //sub
-          double tmp1 = r[decode.rs];
-          double tmp2 = r[decode.rt];
+          int64_t tmp1 = r[decode.rs];
+          int64_t tmp2 = r[decode.rt];
+          int64_t test = tmp1-tmp2;
 
-          if((tmp1-tmp2)>=-2147483648||(tmp1-tmp2)<=2147483647){
-            r[decode.rd] = tmp1-tmp2;
+          if(test>=-2147483648&&test<=2147483647){
+            r[decode.rd] = r[decode.rs]-r[decode.rt];
           }
           else{
             exit(-10);
@@ -87,14 +89,14 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b100001:{
         //addu
-          r[decode.rd] = r[decode.rs]+r[decode.rt];
+          r[decode.rd] = (unsigned int)r[decode.rs]+(unsigned int)r[decode.rt];
           count++;
           pc=pc+4;}
         break;
 
         case 0b100011:{
         //subu
-          r[decode.rd] = r[decode.rs]-r[decode.rt];
+          r[decode.rd] = (unsigned int)r[decode.rs]-(unsigned int)r[decode.rt];
           count++;
           pc=pc+4;}
         break;
@@ -129,7 +131,8 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b000110:{
         //srlv
-          r[decode.rd] = r[decode.rt]>>r[decode.rs];
+          uint32_t tmp_rt = r[decode.rt];
+          r[decode.rd] = tmp_rt>>r[decode.rs];
           count++;
           pc=pc+4;}
         break;
@@ -144,7 +147,10 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b101011:{
         //SLTU
-          if(r[decode.rs]<r[decode.rt]){
+          uint32_t tmp_rs = r[decode.rs];
+          uint32_t tmp_rt = r[decode.rt];
+
+          if(tmp_rs<tmp_rt){
             r[decode.rd] = 1;
           }
           else{
@@ -157,10 +163,8 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b101010:{
         //SLT
-          int rs_tmp = r[decode.rs];
-          int rt_tmp = r[decode.rt];
 
-          if(rs_tmp<rt_tmp){
+          if(r[decode.rs]<r[decode.rt]){
             r[decode.rd] = 1;
           }
           else{
@@ -173,9 +177,10 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b011001:{
         //MULTU
-          hilo = r[decode.rs]*r[decode.rt];
-          hi = hilo>>32;
-          lo = hilo<<32>>32;
+
+          int64_t hilo = ((unsigned int)r[decode.rs])*((unsigned int)r[decode.rt]);
+          hi = (uint64_t)(hilo>>32);
+          lo = (uint64_t)(hilo<<32>>32);
 
           count++;
           pc=pc+4;}
@@ -183,10 +188,8 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b011000:{
         //MULT
-          int rs_tmp = r[decode.rs];
-          int rt_tmp = r[decode.rt];
 
-          hilo = rs_tmp*rt_tmp;
+          int64_t hilo = r[decode.rs]*r[decode.rs];
           hi = hilo>>32;
           lo = hilo<<32>>32;
 
@@ -200,8 +203,8 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
             exit(-10);
           }
           else{
-            hi = r[decode.rs]%r[decode.rt];
-            lo = r[decode.rs]/r[decode.rt];
+            hi = ((unsigned int)r[decode.rs])%((unsigned int)r[decode.rt]);
+            lo = ((unsigned int)r[decode.rs])/((unsigned int)r[decode.rt]);
           }
 
           count++;
@@ -214,10 +217,8 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
             exit(-10);
           }
           else{
-            int rs_tmp = r[decode.rs];
-            int rt_tmp = r[decode.rt];
-            hi = rs_tmp%rt_tmp;
-            lo = rs_tmp/rt_tmp;
+            hi = r[decode.rs]%r[decode.rt];
+            lo = r[decode.rs]/r[decode.rt];
           }
 
           count++;
@@ -272,7 +273,7 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
           else{
 
-            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
             pc = r[decode.rs];
 
             if(pc>=0x10000000&&pc<=0x11000000){
@@ -307,7 +308,7 @@ void r_type(uint32_t r[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
           }
           else{
 
-            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hilo, hi, lo, pc, count);
+            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
             r[decode.rd] = pc+8;
             pc = r[decode.rs];
 
