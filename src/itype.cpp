@@ -30,7 +30,7 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
   itype decode;
   decode.opcode=ins>>26;
-  //<<"opcode in itype is "<<decode.opcode<<endl;
+
   decode.rs = ins<<6>>27;
   //<<"rs in itype is "<<decode.rs<<endl;
   decode.rt = ins<<11>>27;
@@ -58,11 +58,19 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
     int64_t tmp1 = r[decode.rs];
     int64_t tmp2 = decode.sai;
     int64_t test = tmp1+tmp2;
+    //<<"rs in addi is "<<tmp1<<endl;
+    //<<"sai in addi is "<<tmp2<<endl;
+    //cout<<"result in addi is "<<test<<endl;
+    //cout<<"pc in addi"<<hex<<pc<<endl;
+
 
     if(test>=-2147483648&&test<=2147483647){
      r[decode.rt] = r[decode.rs]+decode.sai;
+     //<<"if not overflow then "<<r[decode.rt]<<endl;
+
     }
     else{
+      //<<"overflow"<<endl;
      exit(-10);
     }
 
@@ -75,13 +83,17 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
       uint32_t tmp_ai = decode.ai;
       r[decode.rt] = r[decode.rs] & tmp_ai;
       count++;
-      pc = pc + 4;}
+      pc = pc + 4;
+    //cout<<"pc in addi"<<endl;}
     break;
 
     case 0b001101:{
     //ORI
-      uint32_t tmp_ai = decode.ai;
+      int32_t tmp_ai = decode.ai;
+
+      //<<"decode.ai in ori is "<<tmp_ai<<endl;
       r[decode.rt] = r[decode.rs] | tmp_ai;
+      //<<"rt in ori is "<<r[decode.rt]<<endl;
       count++;
       pc = pc + 4;}
     break;
@@ -89,6 +101,7 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
     case 0b001110:{
     //XORI
       uint32_t tmp_ai = decode.ai;
+
       r[decode.rt] = r[decode.rs] ^ tmp_ai;
       count++;
       pc = pc + 4;}
@@ -160,7 +173,7 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
     uint32_t addr =mem_add+decode.sai;
 
     //IO
-    if(addr%4==0||(addr%2==0)){
+    if(addr%4==0){
 
         if(addr>=0x20000000&&addr<=(0x24000000-3)){
           uint32_t word = r[decode.rt];
@@ -264,6 +277,8 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
     //LUI
       int tmp = decode.sai<<16;
       r[decode.rt] = tmp;
+      //<<"rt in lui is "<<tmp<<endl;
+
       count++;
       pc = pc + 4;}
     break;
@@ -352,83 +367,32 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
     case 0b000100:{
     //BEQ
+      //cout<<"beq"<<endl;
+      //cout<<"pc in beq "<<hex<<pc<<endl;
+      compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
+      if(r[decode.rs]==r[decode.rt]){
 
-      if (ins_mem[count+1]==0){
+        int32_t tmp = decode.sai;
+        tmp = tmp<<2;
+        pc = pc+tmp+4;
+        if(pc>=0x10000000&&pc<=0x11000000){
 
-        if(r[decode.rs]==r[decode.rt]){
-
-          //signed extension to 32 bits;
-          int32_t tmp = decode.sai;
-          //shift 2 bits to left
-          tmp = tmp<<2;
-          pc = pc+tmp+4;
-          if(pc>=0x10000000&&pc<=0x11000000){
-
-             count =(pc-0x10000000)>>2;
-          }
-          else{
-            exit(-11);
-          }
-        }
+           count =(pc-0x10000000)>>2;
+         }
         else{
-          count++;
-          pc = pc + 4;
+          exit(-11);
         }
-      }
-
-      else{//branch delay
-
-        compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
-
-        if(r[decode.rs]==r[decode.rt]){
-
-          //signed extension to 32 bits;
-          int32_t tmp = decode.sai;
-          //shift 2 bits to left
-          tmp = tmp<<2;
-          pc = pc+tmp+4;
-          if(pc>=0x10000000&&pc<=0x11000000){
-
-             count =(pc-0x10000000)>>2;
-          }
-          else{
-            exit(-11);
-          }
-        }
-        else{
-          count++;
-          pc = pc + 4;
-        }
-      }
-    }
+       }
+       else{
+         pc=pc+4;
+         count++;
+       }
+     }
     break;
 
     case 0b000101:{
     //BNE
 
-      if (ins_mem[count+1]==0){
-
-        if(r[decode.rs]!=r[decode.rt]){
-
-          //signed extension to 32 bits;
-          int32_t tmp = decode.sai;
-          //shift 2 bits to left
-          tmp = tmp<<2;
-          pc = pc+tmp+4;
-          if(pc>=0x10000000&&pc<=0x11000000){
-
-             count =(pc-0x10000000)>>2;
-          }
-          else{
-            exit(-11);
-          }
-        }
-        else{
-          count++;
-          pc = pc + 4;
-        }
-      }
-      else{
         compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
         if(r[decode.rs]!=r[decode.rt]){
 
@@ -449,7 +413,6 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
           count++;
           pc = pc + 4;
         }
-      }
     }
     break;
 
@@ -457,19 +420,18 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
     //BGEZ and BLTZ
       switch(decode.rt){
         case 0b00001:{
-        //BEGZ
+        //BGEZ
 
-          int rs_tmp = r[decode.rs];
+            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
-          if (ins_mem[count+1]==0){
-
-            if(rs_tmp>=0){
+            if(r[decode.rs]>=0){
               //change
               //signed extension to 32 bits;
               int32_t tmp = decode.sai;
               //shift 2 bits to left
               tmp = tmp<<2;
               pc = pc+tmp+4;
+
               if(pc>=0x10000000&&pc<=0x11000000){
 
                  count =(pc-0x10000000)>>2;
@@ -482,124 +444,50 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
               count++;
               pc=pc+4;
             }
-          }
-          else{//delay slot
-            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
-
-            if(rs_tmp>=0){
-
-              //signed extension to 32 bits;
-              int32_t tmp = decode.sai;
-              //shift 2 bits to left
-              tmp = tmp<<2;
-              pc = pc+tmp+4;
-              if(pc>=0x10000000&&pc<=0x11000000){
-
-                 count =(pc-0x10000000)>>2;
-              }
-              else{
-                exit(-11);
-              }
-            }
-            else{
-              count++;
-              pc=pc+4;
-            }
-          }
         }
         break;
 
         case 0b00000:{
-        //BLTZ
+          //BLTZ
+           compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
-        int rs_tmp = r[decode.rs];
+           if(r[decode.rs]<0){
+             //change
+             //signed extension to 32 bits;
+             int32_t tmp = decode.sai;
+             //shift 2 bits to left
+             tmp = tmp<<2;
+             pc = pc+tmp+4;
+             if(pc>=0x10000000&&pc<=0x11000000){
 
-          if (ins_mem[count+1]==0){
-
-            if(rs_tmp<0){
-
-              //signed extension to 32 bits;
-              int32_t tmp = decode.sai;
-              //shift 2 bits to left
-              tmp = tmp<<2;
-              pc = pc+tmp+4;
-              if(pc>=0x10000000&&pc<=0x11000000){
-
-                 count =(pc-0x10000000)>>2;
-              }
-              else{
-                exit(-11);
-              }
-            }
-            else{
-              count++;
-              pc=pc+4;
-            }
-          }
-          else{//delay slot
-            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
-
-            if(rs_tmp<0){
-
-              //signed extension to 32 bits;
-              int32_t tmp = decode.sai;
-              //shift 2 bits to left
-              tmp = tmp<<2;
-              pc = pc+tmp+4;
-              if(pc>=0x10000000&&pc<=0x11000000){
-
-                 count =(pc-0x10000000)>>2;
-              }
-              else{
-                exit(-11);
-              }
-            }
-            else{
-              count++;
-              pc=pc+4;
-            }
-          }
+                count =(pc-0x10000000)>>2;
+             }
+             else{
+               exit(-11);
+             }
+           }
+           else{
+             count++;
+             pc=pc+4;
+           }
         }
         break;
 
         case 0b10001:{
         //BGEZAL
-        int rs_tmp = r[decode.rs];
 
-          if(ins_mem[count+1]==0){
-
-            if(rs_tmp>=0){
-
-              r[31] = pc+8;
-              //signed extension to 32 bits;
-              int32_t tmp = decode.sai;
-              //shift 2 bits to left
-              tmp = tmp<<2;
-              pc = pc+tmp+4;
-              if(pc>=0x10000000&&pc<=0x11000000){
-
-                 count =(pc-0x10000000)>>2;
-              }
-              else{
-                exit(-11);
-              }
-            }
-            else{
-              count++;
-              pc=pc+4;
-            }
-          }
-          else{//delay slot
             compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
-            if(rs_tmp>=0){
+            if(r[decode.rs]>=0){
 
-              r[31] = pc+8;
+              r[31] = pc+4;
               //signed extension to 32 bits;
               int32_t tmp = decode.sai;
+
+
               //shift 2 bits to left
               tmp = tmp<<2;
-              pc = pc+tmp+4;
+              pc = pc+tmp;
               if(pc>=0x10000000&&pc<=0x11000000){
 
                  count =(pc-0x10000000)>>2;
@@ -612,48 +500,20 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
               count++;
               pc=pc+4;
             }
-          }
         }
         break;
 
         case 0b10000:{
         //BLTZAL
-        int rs_tmp = r[decode.rs];
-
-          if(ins_mem[count+1]==0){
-
-            if(rs_tmp<0){
-
-              r[31] = pc+8;
-              //signed extension to 32 bits;
-              int32_t tmp = decode.sai;
-              //shift 2 bits to left
-              tmp = tmp<<2;
-              pc = pc+tmp+4;
-              if(pc>=0x10000000&&pc<=0x11000000){
-
-                 count =(pc-0x10000000)>>2;
-              }
-              else{
-                exit(-11);
-              }
-            }
-            else{
-              count++;
-              pc=pc+4;
-            }
-          }
-          else{//delay slot
             compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
+            if(r[decode.rs]<0){
 
-            if(rs_tmp<0){
-
-              r[31] = pc+8;
+              r[31] = pc+4;
               //signed extension to 32 bits;
               int32_t tmp = decode.sai;
               //shift 2 bits to left
               tmp = tmp<<2;
-              pc = pc+tmp+4;
+              pc = pc+tmp;
               if(pc>=0x10000000&&pc<=0x11000000){
 
                  count =(pc-0x10000000)>>2;
@@ -666,10 +526,8 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
               count++;
               pc=pc+4;
             }
-          }
         }
         break;
-
 
         default:
         exit(-12);
@@ -680,11 +538,8 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
     case 0b000111:{
     //BGTZ
-      int rs_tmp = r[decode.rs];
-
-      if (ins_mem[count+1]==0){
-
-        if(rs_tmp>0){
+      compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
+        if(r[decode.rs]>0){
 
           //signed extension to 32 bits;
           int32_t tmp = decode.sai;
@@ -704,67 +559,13 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
           count++;
           pc=pc+4;
         }
-      }
-      else{//delay slot
-        compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
-
-        if(rs_tmp>0){
-
-          //signed extension to 32 bits;
-          int32_t tmp = decode.sai;
-          //shift 2 bits to left
-          tmp = tmp<<2;
-          pc = pc+tmp+4;
-
-          if(pc>=0x10000000&&pc<=0x11000000){
-
-             count =(pc-0x10000000)>>2;
-          }
-
-          else{
-            exit(-11);
-          }
-        }
-        else{
-          count++;
-          pc=pc+4;
-        }
-      }
     }
     break;
 
     case 0b000110:{
     //BLEZ
-      int rs_tmp = r[decode.rs];
-
-      if (ins_mem[count+1]==0){
-
-        if(rs_tmp<=0){
-
-          //signed extension to 32 bits;
-          int32_t tmp = decode.sai;
-          //shift 2 bits to left
-          tmp = tmp<<2;
-          pc = pc+tmp+4;
-
-          if(pc>=0x10000000&&pc<=0x11000000){
-
-             count =(pc-0x10000000)>>2;
-          }
-
-          else{
-            exit(-11);
-          }
-        }
-        else{
-          count++;
-          pc=pc+4;
-        }
-      }
-      else{//delay slot
         compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
-
-        if(rs_tmp<=0){
+        if(r[decode.rs]<=0){
 
           //signed extension to 32 bits;
           int32_t tmp = decode.sai;
@@ -785,7 +586,6 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
           count++;
           pc=pc+4;
         }
-      }
     }
     break;
 

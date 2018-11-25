@@ -1,4 +1,5 @@
 #include<iostream>
+#include<sys/stat.h>
 #include<cstdlib>
 #include<stdint.h>
 #include<stdlib.h>
@@ -26,56 +27,51 @@ int main(int argc, char*argv[]){
   string filename = argv[1];
   binstream.open(filename, ios::binary|ios::in|ios::ate);
   if(!binstream.is_open()){
-    cout<<"not valid"<<endl;
+    cerr<<"not valid"<<endl;
     exit(-21);
   }
 
   uint32_t len = binstream.tellg();
+
   if(len==0||(len%4!=0)){
-    cout<<"invalid binary file"<<endl;
+    cerr <<"invalid binary file"<<endl;
     exit(-21);
   }
 
   binstream.seekg(0,ios::beg);
-  char* memblock = new char [len];
+  char *memblock = new char [len]();
   binstream.read(memblock,len);
 
-  binstream.close();
 
   uint32_t a,b,c,d;
 
-  for(int i=0;i<=(len/4);i++){
+  a=0;
+  b=0;
+  c=0;
+  d=0;
+
+  for(int i=0;i<(len/4);i++){
 
       a = memblock[i*4];
       b = memblock[1+i*4];
       c = memblock[2+i*4];
       d = memblock[3+i*4];
 
-      ins_mem[i]=(a<<24)+(b<<16)+(c<<8)+d;
+      ins_mem[i]=(a<<24)+(b<<24>>8)+(c<<24>>16)+(d<<24>>24);
 
   }
 
+  // cerr << "print ins memory" << '\n';
+  // for (int i=0;i<20;i++){
+  //   cerr << hex << ins_mem[i] << '\n';
+  // }
 
-   while(count<len/4){
 
-        // r[1] = 1;
-        // cout<<"rs:"<<r[1]<<endl;
-        // r[2] = 1;
-        // cout<<"rt:"<<r[2]<<endl;
-        // r[3] = 3;
-        //addiu $t0, $t0,3
-       //ins_mem[0] = 0b00100101000010000000000000000011;
-       //sll $2,$t0,1
-       //ins_mem[1] = 0b00000000000010000001000001000000;
-       //jr $0
-       //ins_mem[2] = 0b00000000000000000000000000001000;
-      //for(int i=0;i<3;i++){
+   while(pc!=0){
+
         compare_op(r, ins_mem[count], ins_mem, data_mem, hi, lo, pc, count);
-      //}
-      // cout<<count<<endl;
-      // cout<<pc<<endl;
-      //cout<<"r2:"<<r[2]<<endl;
-    }
+
+      }
   delete[]memblock;
 
   uint8_t finish = r[2]<<24>>24;

@@ -88,6 +88,7 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
           if(test>=-2147483648&&test<=2147483647){
             r[decode.rd] = r[decode.rs]-r[decode.rt];
+  
           }
           else{
             exit(-10);
@@ -273,39 +274,17 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b001000:{
         //JR
-          if(ins_mem[count+1]==0){
-
-            pc = r[decode.rs];
-            //<<"pc is "<<r[decode.rs]<<endl;
-
-            if(pc==0){
-              return;
-            }
-            else{
-              if(pc>=0x10000000&&pc<=0x11000000){
-                count =(pc-0x10000000)>>2;
-              }
-              else{
-                exit(-11);
-              }
-            }
+          compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
+          pc = r[decode.rs];
+          if(pc==0){
+            return;
           }
-
           else{
-
-            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
-            pc = r[decode.rs];
-
-            if(pc==0){
-              return;
+            if(pc>=0x10000000&&pc<=0x11000000){
+              count =(pc-0x10000000)>>2;
             }
             else{
-              if(pc>=0x10000000&&pc<=0x11000000){
-                count =(pc-0x10000000)>>2;
-              }
-              else{
-                exit(-11);
-              }
+              exit(-11);
             }
           }
         }
@@ -313,36 +292,22 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b001001:{
         //JALR
+
+          compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
+
           if(r[decode.rs]==r[decode.rd]){
             exit(-12);
           }
 
-          if(ins_mem[count+1]==0){
+          r[decode.rd] = pc+8;
+          pc = r[decode.rs];
 
-            r[decode.rd] = pc+8;
-            pc = r[decode.rs];
+          if(pc>=0x10000000&&pc<=0x11000000){
 
-            if(pc>=0x10000000&&pc<=0x11000000){
-
-              count =(pc-0x10000000)>>2;
-            }
-            else{
-               exit(-11);
-            }
+            count =(pc-0x10000000)>>2;
           }
           else{
-
-            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
-            r[decode.rd] = pc+8;
-            pc = r[decode.rs];
-
-            if(pc>=0x10000000&&pc<=0x11000000){
-
-              count =(pc-0x10000000)>>2;
-            }
-            else{
-               exit(-11);
-            }
+             exit(-11);
           }
         }
         break;

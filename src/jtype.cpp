@@ -18,26 +18,16 @@ void j_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
     case 0b000010:{
     //J
-      if (ins_mem[count+1]==0){
 
-        uint32_t tmp_target = decode.target<<2;
-        uint32_t tmp_c = count>>28<<28;
-        pc=tmp_target+tmp_c;
-
-        if(pc>=0x10000000&&pc<=0x11000000){
-
-          count =(pc-0x10000000)>>2;
-        }
-        else{
-          exit(-11);
-        }
-      }
-      else{//have delay slot
-
+        cout<<"pc"<<hex<<pc<<endl;
         compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
+
+        cout<<"pc"<<hex<<pc<<endl;
+
         uint32_t tmp_target = decode.target<<2;
-        uint32_t tmp_c = count>>28<<28;
-        pc=tmp_target+tmp_c;
+        uint32_t tmp_pc = pc>>28<<28;
+        pc=tmp_target+tmp_pc;
+        cout<<"pc"<<pc<<endl;
 
         if(pc>=0x10000000&&pc<=0x11000000){
 
@@ -46,21 +36,18 @@ void j_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
         else{
           exit(-11);
         }
-      }
     }
     break;
 
     case 0b000011:{
     //JAL
-      if(ins_mem[count+1]==0){
-        if(pc+8<=0x11000000){
+      compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
-          r[31] = pc+8;
-        }
+        r[31] = pc+8;
 
         uint32_t tmp_target = decode.target<<2;
-        uint32_t tmp_c = count>>28<<28;
-        pc=tmp_target+tmp_c;
+        uint32_t tmp_pc = pc>>28<<28;
+        pc=tmp_target+tmp_pc;
 
         if(pc>=0x10000000&&pc<=0x11000000){
 
@@ -69,28 +56,6 @@ void j_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
         else{
            exit(-11);
         }
-      }
-
-      else{
-        compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
-
-        if(pc+8<=0x11000000){
-
-          r[31] = pc+8;
-        }
-
-        uint32_t tmp_target = decode.target<<2;
-        uint32_t tmp_c = count>>28<<28;
-        pc=tmp_target+tmp_c;
-
-        if(pc>=0x10000000&&pc<=0x11000000){
-
-          count =(pc-0x10000000)>>2;
-        }
-        else{
-           exit(-11);
-        }
-      }
     }
     break;
 
