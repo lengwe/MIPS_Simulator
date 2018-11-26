@@ -70,5 +70,12 @@ comop.o: ./src/comop.cpp ./src/comop.hpp
 
 
 # Dummy for build testbench to conform to spec. Could do nothing
-testbench:
-	@echo "Nothing to do"
+
+#testbench
+
+bin/mips_testbench:testbench/mips_testbench
+
+	cp testbench/mips_testbench bin
+	chmod u+x bin/mips_testbench
+
+testbench:bin/mips_testbench

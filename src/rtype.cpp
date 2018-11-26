@@ -88,7 +88,7 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
           if(test>=-2147483648&&test<=2147483647){
             r[decode.rd] = r[decode.rs]-r[decode.rt];
-  
+
           }
           else{
             exit(-10);
@@ -193,9 +193,13 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
         case 0b011001:{
         //MULTU
 
-          int64_t hilo = ((unsigned int)r[decode.rs])*((unsigned int)r[decode.rt]);
-          hi = (uint64_t)(hilo>>32);
-          lo = (uint64_t)(hilo<<32>>32);
+          uint64_t a = (unsigned int)r[decode.rs];
+          uint64_t b = (unsigned int)r[decode.rt];
+          int64_t x = a*b;
+
+          int64_t hilo = a*b;
+          hi = (int64_t)(hilo>>32);
+          lo = (int64_t)(hilo<<32>>32);
 
           count++;
           pc=pc+4;}
@@ -203,8 +207,10 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b011000:{
         //MULT
-
-          int64_t hilo = r[decode.rs]*r[decode.rs];
+          uint64_t a = (int)r[decode.rs];
+          uint64_t b = (int)r[decode.rt];
+          int64_t hilo = a*b;
+          //cout<<hilo<<endl;
           hi = hilo>>32;
           lo = hilo<<32>>32;
 
@@ -242,6 +248,7 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b010000:{
         //MFHI
+          //cout<<"hi in MFHI is "<<hi<<endl;
           r[decode.rd] = hi;
 
           count++;
@@ -274,7 +281,10 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b001000:{
         //JR
+          //cout<<"JR"<<endl;
+          //cout<<"pc before "<<hex<<pc<<endl;
           compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
+          //cout<<"pc after "<<hex<<pc<<endl;
           pc = r[decode.rs];
           if(pc==0){
             return;

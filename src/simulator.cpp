@@ -73,7 +73,6 @@ int main(int argc, char*argv[]){
 
       }
   delete[]memblock;
-
   uint8_t finish = r[2]<<24>>24;
   exit(finish);
 }
