@@ -1,0 +1,148 @@
+make[1]: Entering directory '/media/sf_shared/cw/last-chance/working/GoodNight'
+g++ -std=c++11 -W -Wall -c ./src/simulator.cpp -o ./src/simulator.o
+./src/simulator.cpp: In function ‘int main(int, char**)’:
+./src/simulator.cpp:53:16: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for(int i=0;i<(len/4);i++){
+                ^
+./src/simulator.cpp: At global scope:
+./src/simulator.cpp:15:14: warning: unused parameter ‘argc’ [-Wunused-parameter]
+ int main(int argc, char*argv[]){
+              ^
+g++ -std=c++11 -W -Wall -c ./src/rtype.cpp -o ./src/rtype.o
+g++ -std=c++11 -W -Wall -c ./src/itype.cpp -o ./src/itype.o
+./src/itype.cpp: In function ‘void i_type(int32_t (&)[32], uint32_t, uint32_t*, uint8_t*, int32_t&, int32_t&, uint32_t&, uint32_t&)’:
+./src/itype.cpp:90:10: error: jump to case label [-fpermissive]
+     case 0b001101:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:101:10: error: jump to case label [-fpermissive]
+     case 0b001110:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:110:10: error: jump to case label [-fpermissive]
+     case 0b001010:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:124:10: error: jump to case label [-fpermissive]
+     case 0b001011:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:129:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       if(r[decode.rs]<tmp_ai){
+                      ^
+./src/itype.cpp:140:10: error: jump to case label [-fpermissive]
+     case 0b100011:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:170:10: error: jump to case label [-fpermissive]
+     case 0b101011:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:199:10: error: jump to case label [-fpermissive]
+     case 0b101000:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:226:10: error: jump to case label [-fpermissive]
+     case 0b100000:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:251:10: error: jump to case label [-fpermissive]
+     case 0b100100:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:276:10: error: jump to case label [-fpermissive]
+     case 0b001111:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:286:10: error: jump to case label [-fpermissive]
+     case 0b100001:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:314:10: error: jump to case label [-fpermissive]
+     case 0b101001:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:341:10: error: jump to case label [-fpermissive]
+     case 0b100101:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:368:10: error: jump to case label [-fpermissive]
+     case 0b000100:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:393:10: error: jump to case label [-fpermissive]
+     case 0b000101:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:419:10: error: jump to case label [-fpermissive]
+     case 0b000001:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:539:10: error: jump to case label [-fpermissive]
+     case 0b000111:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:565:10: error: jump to case label [-fpermissive]
+     case 0b000110:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:592:10: error: jump to case label [-fpermissive]
+     case 0b100010:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:622:10: error: jump to case label [-fpermissive]
+     case 0b100110:{
+          ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:651:5: error: jump to case label [-fpermissive]
+     default:
+     ^
+./src/itype.cpp:83:16: note:   crosses initialization of ‘uint32_t tmp_ai’
+       uint32_t tmp_ai = decode.ai;
+                ^
+./src/itype.cpp:654:1: error: expected ‘}’ at end of input
+ }
+ ^
+Makefile:63: recipe for target 'itype.o' failed
+make[1]: *** [itype.o] Error 1
+make[1]: Leaving directory '/media/sf_shared/cw/last-chance/working/GoodNight'
