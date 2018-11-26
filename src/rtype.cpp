@@ -281,10 +281,8 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b001000:{
         //JR
-          //cout<<"JR"<<endl;
-          //cout<<"pc before "<<hex<<pc<<endl;
           compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
-          //cout<<"pc after "<<hex<<pc<<endl;
+
           pc = r[decode.rs];
           if(pc==0){
             return;

@@ -35,7 +35,7 @@ void compare_op(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_m
       }
 
       if(r[0] != 0){
-        exit(-21);
+        r[0]=0;
       }
 
     }
