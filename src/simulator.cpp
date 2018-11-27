@@ -58,7 +58,7 @@ int main(int argc, char*argv[]){
       d = memblock[3+i*4];
 
       ins_mem[i]=(a<<24)+(b<<24>>8)+(c<<24>>16)+(d<<24>>24);
-
+  
   }
 
   // cerr << "print ins memory" << '\n';
@@ -68,7 +68,6 @@ int main(int argc, char*argv[]){
 
 
    while(pc!=0){
-
         compare_op(r, ins_mem[count], ins_mem, data_mem, hi, lo, pc, count);
 
       }

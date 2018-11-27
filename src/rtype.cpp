@@ -88,7 +88,6 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
           if(test>=-2147483648&&test<=2147483647){
             r[decode.rd] = r[decode.rs]-r[decode.rt];
-
           }
           else{
             exit(-10);
@@ -195,7 +194,6 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
           uint64_t a = (unsigned int)r[decode.rs];
           uint64_t b = (unsigned int)r[decode.rt];
-          int64_t x = a*b;
 
           int64_t hilo = a*b;
           hi = (int64_t)(hilo>>32);
@@ -221,7 +219,9 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
         case 0b011011:{
         //DIVU
           if(r[decode.rt] == 0){
-            exit(-10);
+            count++;
+            pc=pc+4;
+            return;
           }
           else{
             hi = ((unsigned int)r[decode.rs])%((unsigned int)r[decode.rt]);
@@ -235,7 +235,9 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
         case 0b011010:{
         //DIV
           if(r[decode.rt] == 0){
-            exit(-10);
+            count++;
+            pc=pc+4;
+            return;
           }
           else{
             hi = r[decode.rs]%r[decode.rt];
@@ -281,14 +283,17 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b001000:{
         //JR
+
           compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
-          pc = r[decode.rs];
-          if(pc==0){
+          uint32_t addr = r[decode.rs];
+          if(addr==0){
+            pc = addr;
             return;
           }
           else{
-            if(pc>=0x10000000&&pc<=0x11000000){
+            if((addr>=0x10000000&&addr<=0x11000000)&&(addr%4==0)){
+              pc = addr;
               count =(pc-0x10000000)>>2;
             }
             else{
@@ -301,17 +306,17 @@ void r_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
         case 0b001001:{
         //JALR
 
+          r[decode.rd] = pc+8;
           compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
           if(r[decode.rs]==r[decode.rd]){
             exit(-12);
           }
 
-          r[decode.rd] = pc+8;
-          pc = r[decode.rs];
+          int addr = r[decode.rs];
 
-          if(pc>=0x10000000&&pc<=0x11000000){
-
+          if((addr>=0x10000000&&addr<=0x11000000)&&(addr%4==0)){
+            pc = addr;
             count =(pc-0x10000000)>>2;
           }
           else{

@@ -18,13 +18,7 @@ void addr_getc(int32_t (&r)[32], uint8_t rt){
 }
 
 void addr_putc(int32_t (&r)[32], uint8_t rt){
-
-    // if(r[rt]==-1){
-    //   return;
-    // }
-
     putchar(r[rt]);
-
 }
 
 
@@ -49,9 +43,7 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
     case 0b001001:{
     //ADDIU
 
-
       r[decode.rt] = (unsigned int)r[decode.rs] + decode.sai;
-      //<<"ai is "<<decode.sai<<endl;
 
       count++;
       pc = pc + 4;}
@@ -82,7 +74,7 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
       r[decode.rt] = r[decode.rs] & tmp_ai;
       count++;
       pc = pc + 4;}
-    //cout<<"pc in addi"<<endl;}
+
     break;
 
     case 0b001101:{
@@ -176,17 +168,14 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
     uint32_t addr =mem_add+decode.sai;
     int addr_off = addr - 0x20000000;
 
-    //IO
-
-
         if(addr>=0x20000000&&addr<=(0x24000000-3)){
           if(addr%4==0){
             uint32_t word = r[decode.rt];
-            data_mem[addr_off+3] = word<<24>>24;
-            data_mem[addr_off+2] = word<<16>>24;
-            data_mem[addr_off+1] = word<<8>>24;
             data_mem[addr_off] = word>>24;
-            //cout<<"word "<<word<<endl;
+            data_mem[addr_off+1] = word<<8>>24;
+            data_mem[addr_off+2] = word<<16>>24;
+            data_mem[addr_off+3] = word<<24>>24;
+
           }
           else{
             exit(-11);
@@ -208,22 +197,14 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
     case 0b101000:{
     //SB
     uint32_t mem_add = r[decode.rs];
-    //cout<<"mem_add is "<<mem_add<<endl;
     uint32_t addr = mem_add+decode.sai;
-    //cout<<"addr is "<<hex<<addr<<endl;
     int addr_off = addr - 0x20000000;
 
-
-    //IO
-    //if(addr!=0){
       if(addr>=0x20000000&&addr<=0x24000000){
-        //cout<<"addr is "<<hex<<addr<<endl;
         uint32_t data_reg = r[decode.rt];
-        //cout<<"data_reg is "<<mem_add<<endl;
         int8_t tmp=data_reg<<24>>24;
-       //cout<<"tmp is "<<tmp<<endl;
         data_mem[addr_off] = tmp;
-        //cout<<"data_mem[addr] is "<<data_mem[addr_off]<<endl;
+
       }
       else{
         if(addr<=0x30000007&&addr>=0x30000004){
@@ -235,7 +216,6 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
       }
     count++;
     pc = pc + 4;}
-    //cout<<"pc after sb is "<<hex<<pc<<endl;}
     break;
 
     case 0b100000:{
@@ -332,9 +312,6 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
     uint32_t data_reg = r[decode.rt];
     unsigned int addr =mem_add+decode.sai;
     int addr_off = addr - 0x20000000;
-    //cout<<"addr is "<<hex<<addr<<endl;
-
-    //IO
 
       if(addr>=0x20000000&&addr<=(0x24000000-1)){
         if(addr%2==0){
@@ -347,12 +324,10 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
         }
       }
       else{
-        //cout<<"valid"<<endl;
         if(addr==0x30000004||addr==0x30000006){
           addr_putc(r,decode.rt);
         }
         else{
-          //cout<<"exit"<<endl;
           exit(-11);
         }
       }
@@ -367,13 +342,11 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
     unsigned int addr =mem_add+decode.sai;
     int addr_off = addr - 0x20000000;
 
-    //IO
-
       if(addr>=0x20000000&&addr<=(0x24000000-1)){
         if(addr%2==0){
           r[decode.rt] = data_mem[addr_off+1];
           uint32_t sec_byte = data_mem[addr_off];
-          sec_byte = sec_byte<<8;
+          sec_byte = sec_byte<<24>>16;
           r[decode.rt] = r[decode.rt] + sec_byte;
         }
         else{
@@ -395,18 +368,19 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
     case 0b000100:{
     //BEQ
-      //cout<<"beq"<<endl;
-      //cout<<"pc in beq "<<hex<<pc<<endl;
+      int32_t tmp = decode.sai;
+      tmp = tmp<<2;
+      uint32_t addr = pc+tmp+4;
+
       compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
+
       if(r[decode.rs]==r[decode.rt]){
 
-        int32_t tmp = decode.sai;
-        tmp = tmp<<2;
-        pc = pc+tmp+4;
-        if(pc>=0x10000000&&pc<=0x11000000){
+        if(addr>=0x10000000&&addr<=0x11000000){
+          pc = addr;
+          count =(addr-0x10000000)>>2;
 
-           count =(pc-0x10000000)>>2;
-         }
+        }
         else{
           exit(-11);
         }
@@ -420,17 +394,16 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
     case 0b000101:{
     //BNE
+        int32_t tmp = decode.sai;
+        tmp = tmp<<2;
+        uint32_t addr = pc+tmp+4;
 
         compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
+
         if(r[decode.rs]!=r[decode.rt]){
 
-          //signed extension to 32 bits;
-          int32_t tmp = decode.sai;
-          //shift 2 bits to left
-          tmp = tmp<<2;
-          pc = pc+tmp+4;
-          if(pc>=0x10000000&&pc<=0x11000000){
-
+          if(addr>=0x10000000&&addr<=0x11000000){
+             pc=addr;
              count =(pc-0x10000000)>>2;
           }
           else{
@@ -449,19 +422,17 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
       switch(decode.rt){
         case 0b00001:{
         //BGEZ
+            int32_t tmp = decode.sai;
+            tmp = tmp<<2;
+            uint32_t addr = pc+tmp+4;
 
             compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
             if(r[decode.rs]>=0){
-              //change
-              //signed extension to 32 bits;
-              int32_t tmp = decode.sai;
-              //shift 2 bits to left
-              tmp = tmp<<2;
-              pc = pc+tmp+4;
 
-              if(pc>=0x10000000&&pc<=0x11000000){
 
+              if(addr>=0x10000000&&addr<=0x11000000){
+                 pc=addr;
                  count =(pc-0x10000000)>>2;
               }
               else{
@@ -477,17 +448,16 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b00000:{
           //BLTZ
+           int32_t tmp = decode.sai;
+           tmp = tmp<<2;
+           uint32_t addr = pc+tmp+4;
+
            compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
            if(r[decode.rs]<0){
-             //change
-             //signed extension to 32 bits;
-             int32_t tmp = decode.sai;
-             //shift 2 bits to left
-             tmp = tmp<<2;
-             pc = pc+tmp+4;
-             if(pc>=0x10000000&&pc<=0x11000000){
 
+             if(addr>=0x10000000&&addr<=0x11000000){
+                pc=addr;
                 count =(pc-0x10000000)>>2;
              }
              else{
@@ -503,21 +473,17 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b10001:{
         //BGEZAL
+            int32_t tmp = decode.sai;
+            tmp = tmp<<2;
+            uint32_t addr = pc+tmp+4;
+            r[31]=pc+8;
 
             compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
             if(r[decode.rs]>=0){
 
-              r[31] = pc+4;
-              //signed extension to 32 bits;
-              int32_t tmp = decode.sai;
-
-
-              //shift 2 bits to left
-              tmp = tmp<<2;
-              pc = pc+tmp;
-              if(pc>=0x10000000&&pc<=0x11000000){
-
+              if(addr>=0x10000000&&addr<=0x11000000){
+                 pc=addr;
                  count =(pc-0x10000000)>>2;
               }
               else{
@@ -533,17 +499,16 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
         case 0b10000:{
         //BLTZAL
+            int32_t tmp = decode.sai;
+            tmp = tmp<<2;
+            uint32_t addr = pc+tmp+4;
+            r[31]=pc+8;
+
             compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
             if(r[decode.rs]<0){
 
-              r[31] = pc+4;
-              //signed extension to 32 bits;
-              int32_t tmp = decode.sai;
-              //shift 2 bits to left
-              tmp = tmp<<2;
-              pc = pc+tmp;
-              if(pc>=0x10000000&&pc<=0x11000000){
-
+              if(addr>=0x10000000&&addr<=0x11000000){
+                 pc= addr;
                  count =(pc-0x10000000)>>2;
               }
               else{
@@ -566,17 +531,17 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
     case 0b000111:{
     //BGTZ
-      compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
+        int32_t tmp = decode.sai;
+        tmp = tmp<<2;
+        uint32_t addr = pc+tmp+4;
+
+        compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
         if(r[decode.rs]>0){
 
-          //signed extension to 32 bits;
-          int32_t tmp = decode.sai;
-          //shift 2 bits to left
-          tmp = tmp<<2;
-          pc = pc+tmp+4;
 
-          if(pc>=0x10000000&&pc<=0x11000000){
 
+          if(addr>=0x10000000&&addr<=0x11000000){
+             pc=addr;
              count =(pc-0x10000000)>>2;
           }
           else{
@@ -592,17 +557,15 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
     case 0b000110:{
     //BLEZ
+        int32_t tmp = decode.sai;
+        tmp = tmp<<2;
+        uint32_t addr = pc+tmp+4;
+
         compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
         if(r[decode.rs]<=0){
 
-          //signed extension to 32 bits;
-          int32_t tmp = decode.sai;
-          //shift 2 bits to left
-          tmp = tmp<<2;
-          pc = pc+tmp+4;
-
-          if(pc>=0x10000000&&pc<=0x11000000){
-
+          if(addr>=0x10000000&&addr<=0x11000000){
+             pc=addr;
              count =(pc-0x10000000)>>2;
           }
 
@@ -629,13 +592,12 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
         for (int i=0; i<read;i++){
           uint32_t bytes = data_mem[effaddr_off+i];
           bytes = bytes<<24>>24;
-          int shift = (read-i+1)*8;
+          int shift = (read-i-1)*8;
           r[decode.rt] = r[decode.rt] + (bytes<<shift);
         }
       }
       else{
-          if((effaddr>=(0x30000000+effaddr_off))&&
-              effaddr<=0x30000003){
+          if((effaddr>=0x30000000)&&(effaddr<=0x30000003)){
             addr_getc(r,decode.rt);
           }
           else{
@@ -664,7 +626,7 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
       }
 
       else{
-        if((effaddr<=0x30000000+effaddr_off)&&(effaddr>=0x30000000)){
+        if((effaddr>=0x30000000)&&(effaddr<=0x30000003)){
           addr_getc(r,decode.rt);
         }
         else{

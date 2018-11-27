@@ -18,6 +18,7 @@ void j_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
     case 0b000010:{
     //J
+
         compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
         uint32_t tmp_target = decode.target<<2;
@@ -36,9 +37,8 @@ void j_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
 
     case 0b000011:{
     //JAL
-      compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
-
         r[31] = pc+8;
+        compare_op(r, ins_mem[count+1], ins_mem, data_mem, hi, lo, pc, count);
 
         uint32_t tmp_target = decode.target<<2;
         uint32_t tmp_pc = pc>>28<<28;
