@@ -75,6 +75,7 @@ comop.o: ./src/comop.cpp ./src/comop.hpp
 
 bin/mips_testbench:testbench/mips_testbench
 
+	rm -f bin/mips_testbench
 	cp testbench/mips_testbench bin
 	chmod u+x bin/mips_testbench
 
