@@ -585,14 +585,21 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
       uint32_t effaddr = decode.sai + r[decode.rs];
       int effaddr_off = effaddr - 0x20000000;
       int read = 4-(effaddr_off%4);
-      r[decode.rt] = ((unsigned int)(r[decode.rt]))<<(read*8)>>(read*8);
+      int move = read*8;
+
+      if(read==4){
+        r[decode.rt] = 0;
+      }
+      else{
+        r[decode.rt] = ((uint32_t)(r[decode.rt]))<<move>>move;
+      }
 
       if ((effaddr>=0x20000000)&&(effaddr<=0x24000000)){
 
         for (int i=0; i<read;i++){
           uint32_t bytes = data_mem[effaddr_off+i];
           bytes = bytes<<24>>24;
-          int shift = (read-i-1)*8;
+          int shift = 24-i*8;
           r[decode.rt] = r[decode.rt] + (bytes<<shift);
         }
       }

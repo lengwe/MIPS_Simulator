@@ -1,71 +1,71 @@
-ADD1,ADD,0,GoodNight
-ADD2,ADD,0,GoodNight
-ADD3,ADD,0,GoodNight
-ADDI1,ADDI,0,GoodNight
-ADDI2,ADDI,0,GoodNight
-ADDIU,ADDIU,0,GoodNight
-ADDU,ADDU,0,GoodNight
-AND,AND,0,GoodNight
-ANDI,ANDI,0,GoodNight
-BEQ,BEQ,0,GoodNight
-BGEZ,BGEZ,0,GoodNight
-BGEZAL,BGEZAL,0,GoodNight
-BEGTZ,BEGTZ,0,GoodNight
-BLEZ,BLEZ,0,GoodNight
-BLTZ,BLTZ,0,GoodNight
-BLTZAL,BLTZAL,0,GoodNight
-BNE,BNE,0,GoodNight
-DIV1,DIV,0,GoodNight
-DIV2,DIV,0,GoodNight
-DIV3,DIV,0,GoodNight
-DIVU1,DIVU,0,GoodNight
-DIVU2,DIVU,0,GoodNight
-J1,J,0,GoodNight
-JALR,JALR,0,GoodNight
-JR,JR,0,GoodNight
-LB,LB,0,GoodNight
-LBU,LBU,0,GoodNight
-LH,LH,0,GoodNight
-LH2,LH,0,GoodNight
-LHU,LHU,0,GoodNight
-LHU2,LHU,0,GoodNight
-LUI,LUI,0,GoodNight
-LW1,LW,0,GoodNight
-LW2,LW,0,GoodNight
-LW3,LW,0,GoodNight
-LWL,LWL,0,GoodNight
-LWL2,LWL,0,GoodNight
-LWR,LWR,0,GoodNight
-LWR2,LWR,0,GoodNight
-MULT1,MULT,0,GoodNight
-MULT2,MULT,0,GoodNight
-MULTU,MULTU,0,GoodNight
-OR,OR,0,GoodNight
-ORI,ORI,0,GoodNight
-SLL,SLL,0,GoodNight
-SLL2,SLL,0,GoodNight
-SLLV1,SLLV,0,GoodNight
-SLLV2,SLLV,0,GoodNight
-SLT1,SLT1,0,GoodNight
-SLT2,SLT,0,GoodNight
-SLTI1,SLTI,0,GoodNight
-SLTI2,SLTI,0,GoodNight
-SLTIU1,SLTIU,0,GoodNight
-SLTIU2,SLTIU,0,GoodNight
-SRA,SRA,0,GoodNight
-SRA2,SRA,0,GoodNight
-SRAV1,SRAV,0,GoodNight
-SRAV2,SRAV,0,GoodNight
-SRL,SRL,0,GoodNight
-SRL2,SRL,0,GoodNight
-SRLV1,SRLV,0,GoodNight
-SRLV2,SRLV,0,GoodNight
-SUB,SUB,0,GoodNight
-SUB2,SUB,0,GoodNight
-SUBU,SUBU,0,GoodNight
-SUBU2,SUBU,0,GoodNight
-SW1,SW,0,GoodNight
-SW2,SW,0,GoodNight
-SW3,SW,0,GoodNight
-XOR,XOR,0,GoodNight
-XORI,XORI,0,GoodNight
+ADD1 , ADD , 0 , GoodNight
+ADD2 , ADD , 0 , GoodNight
+ADD3 , ADD , 0 , GoodNight
+ADDI1 , ADDI , 0 , GoodNight
+ADDI2 , ADDI , 0 , GoodNight
+ADDIU , ADDIU , 0 , GoodNight
+ADDU , ADDU , 0 , GoodNight
+AND , AND , 0 , GoodNight
+ANDI , ANDI , 0 , GoodNight
+BEQ , BEQ , 0 , GoodNight
+BGEZ , BGEZ , 0 , GoodNight
+BGEZAL , BGEZAL , 0 , GoodNight
+BEGTZ , BEGTZ , 0 , GoodNight
+BLEZ , BLEZ , 0 , GoodNight
+BLTZ , BLTZ , 0 , GoodNight
+BLTZAL , BLTZAL , 0 , GoodNight
+BNE , BNE , 0 , GoodNight
+DIV1 , DIV , 0 , GoodNight
+DIV2 , DIV , 0 , GoodNight
+DIV3 , DIV , 0 , GoodNight
+DIVU1 , DIVU , 0 , GoodNight
+DIVU2 , DIVU , 0 , GoodNight
+J1 , J , 0 , GoodNight
+JALR , JALR , 0 , GoodNight
+JR , JR , 0 , GoodNight
+LB , LB , 0 , GoodNight
+LBU , LBU , 0 , GoodNight
+LH , LH , 0 , GoodNight
+LH2 , LH , 0 , GoodNight
+LHU , LHU , 0 , GoodNight
+LHU2 , LHU , 0 , GoodNight
+LUI , LUI , 0 , GoodNight
+LW1 , LW , 0 , GoodNight
+LW2 , LW , 0 , GoodNight
+LW3 , LW , 0 , GoodNight
+LWL , LWL , 0 , GoodNight
+LWL2 , LWL , 0 , GoodNight
+LWR , LWR , 0 , GoodNight
+LWR2 , LWR , 0 , GoodNight
+MULT1 , MULT , 0 , GoodNight
+MULT2 , MULT , 0 , GoodNight
+MULTU , MULTU , 0 , GoodNight
+OR , OR , 0 , GoodNight
+ORI , ORI , 0 , GoodNight
+SLL , SLL , 0 , GoodNight
+SLL2 , SLL , 0 , GoodNight
+SLLV1 , SLLV , 0 , GoodNight
+SLLV2 , SLLV , 0 , GoodNight
+SLT1 , SLT1 , 0 , GoodNight
+SLT2 , SLT , 0 , GoodNight
+SLTI1 , SLTI , 0 , GoodNight
+SLTI2 , SLTI , 0 , GoodNight
+SLTIU1 , SLTIU , 0 , GoodNight
+SLTIU2 , SLTIU , 0 , GoodNight
+SRA , SRA , 0 , GoodNight
+SRA2 , SRA , 0 , GoodNight
+SRAV1 , SRAV , 0 , GoodNight
+SRAV2 , SRAV , 0 , GoodNight
+SRL , SRL , 0 , GoodNight
+SRL2 , SRL , 0 , GoodNight
+SRLV1 , SRLV , 0 , GoodNight
+SRLV2 , SRLV , 0 , GoodNight
+SUB , SUB , 0 , GoodNight
+SUB2 , SUB , 0 , GoodNight
+SUBU , SUBU , 0 , GoodNight
+SUBU2 , SUBU , 0 , GoodNight
+SW1 , SW , 0 , GoodNight
+SW2 , SW , 0 , GoodNight
+SW3 , SW , 0 , GoodNight
+XOR , XOR , 0 , GoodNight
+XORI , XORI , 0 , GoodNight
