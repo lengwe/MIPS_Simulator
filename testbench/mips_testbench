@@ -225,7 +225,11 @@ echo $? >> test/output/testoutput.txt
 $simulator testbench/test_xori.mips.bin
 echo $? >> test/output/testoutput.txt
 
+cat testbench/lb2getc.txt | $simulator testbench/test_lb2.mips.bin
+echo $? >> test/output/testoutput.txt
 
+cat testbench/lh3getc.txt | $simulator testbench/test_lh3.mips.bin
+echo $? >> test/output/testoutput.txt
 
 #c++ csv file to compare two files
 g++ -std=c++11 -Wall testbench/csvfile.cpp -o csvfile

@@ -1,4 +1,4 @@
-#test lw,should return 245
+#test lw,should return 120
 lui $3,0x2000
 addi $4,$0,0xabcd
 sw $4,0($3)

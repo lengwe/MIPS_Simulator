@@ -69,3 +69,5 @@ SW2 , SW , 0 , GoodNight
 SW3 , SW , 0 , GoodNight
 XOR , XOR , 0 , GoodNight
 XORI , XORI , 0 , GoodNight
+LB2 , LB , 0 , GoodNight
+LH3 , LH , 0 , GoodNight
