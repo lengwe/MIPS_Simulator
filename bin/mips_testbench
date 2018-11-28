@@ -1,0 +1,232 @@
+#!/bin/bash
+
+rm ./test/output/testoutput.txt
+rm ./test/output/testoutput.csv
+
+simulator=$1
+  #first argument passed in the variable
+
+touch ./test/output/testoutput.txt
+  #create file to store testbench output
+
+#tests
+
+$simulator ./testbench/add1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_add2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_add3.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_addi1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_addi2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_addiu.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_addu.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_and.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_andi.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_beq.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_bgez.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_bgezal.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_bgtz.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_blez.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_bltz.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_bltzal.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_bne.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_div1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_div2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_div3.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_divu1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_divu2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_j1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_jalr.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_jr.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lb.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lbu.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lh.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lh2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lhu.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lhu2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lui.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lw1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+cat testbench/lw2getc.txt | $simulator testbench/test_lw2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lw3.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lwl.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lwl2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lwr.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_lwr2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_mult1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_mult2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_multu1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_or.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_ori.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sll.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sll2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sllv1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sllv2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_slt1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_slt2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_slti1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_slti2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sltiu1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sltiu2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sra.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sra2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_srav1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_srav2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_srl.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_srl2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_srlv1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_srlv2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sub.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sub2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_subu.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_subu2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sw1.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sw2.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_sw3.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_xor.mips.bin
+echo $? >> test/output/testoutput.txt
+
+$simulator testbench/test_xori.mips.bin
+echo $? >> test/output/testoutput.txt
+
+
+
+#c++ csv file to compare two files
+g++ -std=c++11 -Wall testbench/csvfile.cpp -o csvfile
+./csvfile ./testbench/test.csv ./testbench/reference.txt ./test/output/testoutput.txt
+mv testoutput.csv ./test/output
