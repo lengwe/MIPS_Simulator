@@ -281,7 +281,6 @@ void i_type(int32_t (&r)[32], uint32_t ins,uint32_t *ins_mem,uint8_t *data_mem,
       unsigned int addr =mem_add+decode.sai;
       int addr_off = addr - 0x20000000;
 
-      //IO
         if(addr>=0x20000000&&addr<=(0x24000000-1)){
           if(addr%2==0){
             r[decode.rt] = data_mem[addr_off+1];
