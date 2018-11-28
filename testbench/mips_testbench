@@ -1,13 +1,14 @@
 #!/bin/bash
 
 rm ./test/output/testoutput.txt
+rm ./test/output/testoutput.csv
 
 simulator=$1
   #first argument passed in the variable
 
 touch ./test/output/testoutput.txt
   #create file to store testbench output
-FILE=./testbench/
+
 
 #tests
 
@@ -229,3 +230,4 @@ echo $? >> test/output/testoutput.txt
 #c++ csv file to compare two files
 g++ -std=c++11 -Wall testbench/csvfile.cpp -o csvfile
 ./csvfile ./testbench/test.csv ./testbench/reference.txt ./test/output/testoutput.txt
+mv testoutput.csv ./test/output
