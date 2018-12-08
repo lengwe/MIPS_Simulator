@@ -1,0 +1,22 @@
+rm: cannot remove './test/output/testoutput.csv': No such file or directory
+Exception :   overflow: s=2147483647, t=1
+Exception :   overflow: s=-2147483648, t=-2147483648
+Exception : Overflow.
+Exception : Attempt to execute instruction at mis-aligned address 0x1000000f.
+Exception : Attempt to execute instruction at mis-aligned address 0x2000000f.
+Exception : Attempt to access range [DATA_ADDR+DATA_LEN,GETC_ADDR).
+Exception : Address is not aligned.
+Exception : Address is not aligned.
+Exception : Address is not aligned.
+Exception : Attempt to write to instruction memory.
+Exception : Attempt to write to instruction memory.
+Exception :     overflow, s=-2147483648, t=1
+Timeout from MIPS simulator after running for 60 seconds
+Exception : Address is not aligned.
+Exception : Address is not aligned.
+sub-word access to GETC.
+sub-word access to GETC.
+testbench/csvfile.cpp: In function ‘int main(int, char**)’:
+testbench/csvfile.cpp:71:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    for(int i=0;i<csv.size();i++){
+                 ^

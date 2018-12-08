@@ -1,0 +1,22 @@
+make[1]: Entering directory '/media/sf_shared/cw/summative/working/GoodNight'
+g++ -std=c++11 -W -Wall -c ./src/simulator.cpp -o ./src/simulator.o
+./src/simulator.cpp: In function ‘int main(int, char**)’:
+./src/simulator.cpp:53:16: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   for(int i=0;i<(len/4);i++){
+                ^
+./src/simulator.cpp: At global scope:
+./src/simulator.cpp:15:14: warning: unused parameter ‘argc’ [-Wunused-parameter]
+ int main(int argc, char*argv[]){
+              ^
+g++ -std=c++11 -W -Wall -c ./src/rtype.cpp -o ./src/rtype.o
+g++ -std=c++11 -W -Wall -c ./src/itype.cpp -o ./src/itype.o
+./src/itype.cpp: In function ‘void i_type(int32_t (&)[32], uint32_t, uint32_t*, uint8_t*, int32_t&, int32_t&, uint32_t&, uint32_t&)’:
+./src/itype.cpp:120:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       if(r[decode.rs]<tmp_sai){
+                      ^
+g++ -std=c++11 -W -Wall -c ./src/jtype.cpp -o ./src/jtype.o
+g++ -std=c++11 -W -Wall -c ./src/comop.cpp -o ./src/comop.o
+mkdir -p bin
+rm -f bin/mips_simulator
+g++ -std=c++11 -W -Wall ./src/*.o -o bin/mips_simulator
+make[1]: Leaving directory '/media/sf_shared/cw/summative/working/GoodNight'

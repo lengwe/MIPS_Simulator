@@ -1,0 +1,95 @@
+Exception :   overflow: s=2147483647, t=1
+Disable instruction 'ADD' for test 'ADD1'
+Exception :   overflow: s=-2147483648, t=-2147483648
+Disable instruction 'ADD' for test 'ADD2'
+Disable instruction 'ADD' for test 'ADD3'
+Disable instruction 'ADDI' for test 'ADDI1'
+Exception : Overflow.
+Disable instruction 'ADDI' for test 'ADDI2'
+Disable instruction 'ADDIU' for test 'ADDIU'
+Disable instruction 'ADDU' for test 'ADDU'
+Disable instruction 'AND' for test 'AND'
+Disable instruction 'ANDI' for test 'ANDI'
+Disable instruction 'BEQ' for test 'BEQ'
+Disable instruction 'BGEZ' for test 'BGEZ'
+Disable instruction 'BGEZAL' for test 'BGEZAL'
+Disable instruction 'BEGTZ' for test 'BEGTZ'
+Disable instruction 'BLEZ' for test 'BLEZ'
+Disable instruction 'BLTZ' for test 'BLTZ'
+Disable instruction 'BLTZAL' for test 'BLTZAL'
+Disable instruction 'BNE' for test 'BNE'
+Disable instruction 'DIV' for test 'DIV1'
+Disable instruction 'DIV' for test 'DIV2'
+Disable instruction 'DIV' for test 'DIV3'
+Disable instruction 'DIVU' for test 'DIVU1'
+Disable instruction 'DIVU' for test 'DIVU2'
+Disable instruction 'J' for test 'J1'
+Exception : Attempt to execute instruction at mis-aligned address 0x1000000f.
+Disable instruction 'JALR' for test 'JALR'
+Exception : Attempt to execute instruction at mis-aligned address 0x2000000f.
+Disable instruction 'JR' for test 'JR'
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Disable instruction 'LB' for test 'LB'
+Exception : Attempt to access range [DATA_ADDR+DATA_LEN,GETC_ADDR).
+Disable instruction 'LBU' for test 'LBU'
+Disable instruction 'LH' for test 'LH'
+Exception : Address is not aligned.
+Disable instruction 'LH' for test 'LH2'
+Disable instruction 'LHU' for test 'LHU'
+Exception : Address is not aligned.
+Disable instruction 'LHU' for test 'LHU2'
+Disable instruction 'LUI' for test 'LUI'
+Exception : Attempt to access range [0,INSTR_ADDR).
+Disable instruction 'LW' for test 'LW1'
+Disable instruction 'LW' for test 'LW2'
+Exception : Address is not aligned.
+Disable instruction 'LW' for test 'LW3'
+Disable instruction 'LWL' for test 'LWL'
+Exception : Attempt to write to instruction memory.
+Disable instruction 'LWL' for test 'LWL2'
+Disable instruction 'LWR' for test 'LWR'
+Exception : Attempt to write to instruction memory.
+Disable instruction 'LWR' for test 'LWR2'
+Disable instruction 'MULT' for test 'MULT1'
+Disable instruction 'MULT' for test 'MULT2'
+Disable instruction 'MULTU' for test 'MULTU'
+Disable instruction 'OR' for test 'OR'
+Disable instruction 'ORI' for test 'ORI'
+Disable instruction 'SLL' for test 'SLL'
+Disable instruction 'SLL' for test 'SLL2'
+Disable instruction 'SLLV' for test 'SLLV1'
+Disable instruction 'SLLV' for test 'SLLV2'
+Disable instruction 'SLT1' for test 'SLT1'
+Disable instruction 'SLT' for test 'SLT2'
+Disable instruction 'SLTI' for test 'SLTI1'
+Disable instruction 'SLTI' for test 'SLTI2'
+Disable instruction 'SLTIU' for test 'SLTIU1'
+Disable instruction 'SLTIU' for test 'SLTIU2'
+Disable instruction 'SRA' for test 'SRA'
+Disable instruction 'SRA' for test 'SRA2'
+Disable instruction 'SRAV' for test 'SRAV1'
+Disable instruction 'SRAV' for test 'SRAV2'
+Disable instruction 'SRL' for test 'SRL'
+Disable instruction 'SRL' for test 'SRL2'
+Disable instruction 'SRLV' for test 'SRLV1'
+Disable instruction 'SRLV' for test 'SRLV2'
+Disable instruction 'SUB' for test 'SUB'
+Exception :     overflow, s=-2147483648, t=1
+Disable instruction 'SUB' for test 'SUB2'
+Disable instruction 'SUBU' for test 'SUBU'
+Disable instruction 'SUBU' for test 'SUBU2'
+Timeout from MIPS simulator after running for 60 seconds
+Disable instruction 'SW' for test 'SW1'
+Exception : Address is not aligned.
+Disable instruction 'SW' for test 'SW2'
+Exception : Address is not aligned.
+Disable instruction 'SW' for test 'SW3'
+Disable instruction 'XOR' for test 'XOR'
+Disable instruction 'XORI' for test 'XORI'
+sub-word access to GETC.
+Disable instruction 'LB' for test 'LB2'
+sub-word access to GETC.
+testbench/csvfile.cpp: In function ‘int main(int, char**)’:
+testbench/csvfile.cpp:71:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    for(int i=0;i<csv.size();i++){
+                 ^
