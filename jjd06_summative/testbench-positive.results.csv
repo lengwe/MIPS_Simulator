@@ -64,7 +64,7 @@ SUB,SUB,pass,GoodNight
 SUB2,SUB,pass,GoodNight
 SUBU,SUBU,pass,GoodNight
 SUBU2,SUBU,pass,GoodNight
-SW1,SW,fail,GoodNight
+SW1,SW,pass,GoodNight
 SW2,SW,pass,GoodNight
 SW3,SW,pass,GoodNight
 XOR,XOR,pass,GoodNight
