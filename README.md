@@ -12,10 +12,10 @@ make simulator
 
 This will then generate an excutable file called: `bin/mips_simulator`.
 
-To run the simulator, use the existence of a Binary file, such as `./testbench/xxx.bin` as the input. For example,
+To run the simulator, use the existence of a Binary file, such as `testbench/xxx.bin` as the input. For example,
 
 ```
-bin/mips_simulator ./testbench/add1.mips.bin
+bin/mips_simulator testbench/add1.mips.bin
 ```
 
 ## Testbench build and execution
